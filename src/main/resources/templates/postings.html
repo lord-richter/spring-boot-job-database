@@ -25,26 +25,21 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr th:each="posting : ${postings}">
+				<tr th:each="i : ${#numbers.sequence(postings.size() - 1,0,-1)}"
+					th:with="posting=${postings[i]}">
 					<td th:text="${posting.date}">Posting Date</td>
 					<td th:text="${posting.name}">Position</td>
 					<td th:text="${posting.companyName}">Company</td>
-					<td> (nothing)
-<!-- 						<div class="form-group blu-margin" th:object="${posting}"> -->
-<!-- 						    <select class="form-control" name="dropStatus" id="dropStatus"> -->
-<!--     							<option th:each="status : ${statuslist}"  -->
-<!--     								th:value="${status}" -->
-<!--     								th:text="${status}">option</option> -->
-<!--     						</select> -->
-<!-- 						</div> -->
-					</td>
+					<td th:text="${posting.appId.status}">(status)</td>
 					<td>
-						<a class="btn btn-primary" href="#" th:href="@{/postings/{id}(id=${posting.id})}">Details</a>
+						<a class="btn btn-primary" href="#" th:href="@{/postings/view/{id}(id=${posting.id})}">Details</a>
 					</td>
 				</tr>
 			</tbody>
 		</table>
-		<div></div>
+		<div>
+		
+		</div>
 	</div>
 	<script
 		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"

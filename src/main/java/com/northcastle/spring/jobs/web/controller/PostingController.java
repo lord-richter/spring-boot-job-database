@@ -1,7 +1,6 @@
 package com.northcastle.spring.jobs.web.controller;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
@@ -33,13 +32,13 @@ public class PostingController {
   public String getPostings(Model model){
     model.addAttribute("postings", this.postingRepository.findAll());
     model.addAttribute("applications", this.applicationRepository.findAll());
-    model.addAttribute("statuslist",new ArrayList<String>(Application.STATUSLIST));
+    model.addAttribute("module", "postings");
     System.out.println("getPostings");
     model.asMap().forEach((k,v) -> {System.out.println(k+" = "+v);});
     return "postings";
   }
   
-  @GetMapping(path = "/{id}")
+  @GetMapping(path = "/view/{id}")
   public String getPosting(@PathVariable("id") long postingId, Model model) {
       Optional<Posting> posting = this.postingRepository.findById(postingId);
       if (posting.isEmpty()) {
@@ -49,13 +48,12 @@ public class PostingController {
       }
       
       model.addAttribute("posting", posting.get());
-      
-      List<Application> applications = new ArrayList<>();
-      Iterable<Application> appIterable = this.applicationRepository.findAllByPostingId(posting.get().getId());
-      appIterable.forEach(applications::add);
-  
-      model.addAttribute("application", applications);
+      Application application = posting.get().getAppId();
+      model.addAttribute("application", application);
+      model.addAttribute("statuslist",new ArrayList<String>(Application.STATUSLIST));
       model.addAttribute("module", "postings");
+      System.out.println("getPosting");
+      model.asMap().forEach((k,v) -> {System.out.println(k+" = "+v);});      
       return "posting";
   }
 }

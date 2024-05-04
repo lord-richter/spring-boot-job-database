@@ -17,4 +17,5 @@ public class PostingModel {
 	private Date date;
 	private String companyName;
 	private String companyAddress;
+	private ApplicationModel appId;
 }

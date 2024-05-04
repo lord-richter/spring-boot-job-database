@@ -1,5 +1,6 @@
 package com.northcastle.spring.jobs.data.entity;
 import java.sql.Date;
+import java.util.Arrays;
 import java.util.List;
 
 import jakarta.persistence.Column;
@@ -24,9 +25,7 @@ public class Application {
 	public static final String REJECTED = "Rejected";
 	public static final String CLOSED = "Closed";
 	
-	public static List<String> STATUSLIST = List.of(
-				PENDING,APPLIED,INTERVIEW,REJECTED,CLOSED
-			);
+	public static List<String> STATUSLIST = Arrays.asList(PENDING,APPLIED,INTERVIEW,REJECTED,CLOSED);
 			
 	@Id
 	@Column(name="app_id")
@@ -38,8 +37,4 @@ public class Application {
 
 	@Column(name="app_status")
 	private String status;
-
-	@Column(name="posting_id")
-	private Long postingId;
-
 }

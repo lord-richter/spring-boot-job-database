@@ -13,5 +13,4 @@ public class ApplicationModel {
 	private Long id;
 	private Date date;
 	private String status;
-	private Long postingId;
 }

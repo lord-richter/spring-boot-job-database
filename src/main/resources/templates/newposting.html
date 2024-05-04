@@ -12,13 +12,20 @@
     <div class="card">
     	<div class="card-header">Job Posting</div>
         <div class="card-body">
-        	<h3 class="card-title" th:text="${posting.name}">Position</h3>
-            <h5 class="card-subtitle" th:text="|${posting.companyName} - ${posting.companyAddress}|">Company Name - Address</h5>
-            <p>Status: <span th:text="'Status: ' + ${posting.appId.status}">(status)</span></p>
+        	<p>Posting Date: </p>
+        	<p>Companuy: <span th:text="'Status: ' + ${posting.appId.status}">(status)</span></p>
             <p>Applied Date: <span th:text="${posting.appId.date} ? ${posting.appId.date}">(date)</span></p>
         </div>
     </div>
-    <a class="btn btn-primary" href="/postings">Return to Postings</a>
+    <div class="card">
+    	<div class="card-header">Application</div>
+        <div class="card-body">
+            <p>Status: <span th:text="'Status: ' + ${posting.appId.status}">(status)</span></p>
+            <p>Applied Date: <span th:text="${posting.appId.date} ? ${posting.appId.date}">(date)</span></p>
+        </div>
+    </div>    
+    <input type="submit" value="Save">
+    
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
