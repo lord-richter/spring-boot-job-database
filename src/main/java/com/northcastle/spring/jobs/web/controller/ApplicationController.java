@@ -5,21 +5,21 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.northcastle.spring.jobs.data.repository.ApplicationRepository;
+import com.northcastle.spring.jobs.data.repository.PostingRepository;
 
 @Controller
 @RequestMapping("/applications")
 public class ApplicationController {
 
-  private final ApplicationRepository appRepository;
+  private final PostingRepository postingRepository;
 
-  public ApplicationController(ApplicationRepository appRepository) {
-    this.appRepository = appRepository;
+  public ApplicationController(PostingRepository postingRepository) {
+    this.postingRepository = postingRepository;
   }
 
   @GetMapping
   public String getApplications(Model model){
-    model.addAttribute("applications", this.appRepository.findAll());
+    model.addAttribute("applications", this.postingRepository.findAllApplied());
     return "applications";
   }
 }

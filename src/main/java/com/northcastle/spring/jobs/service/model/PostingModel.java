@@ -14,8 +14,10 @@ public class PostingModel {
 	private String name;
 	private String referenceID;
 	private String sort;
+	private String url;
 	private Date date;
 	private String companyName;
 	private String companyAddress;
-	private ApplicationModel appId;
+	private Date appDate;
+	private String appStatus;
 }

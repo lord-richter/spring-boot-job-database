@@ -1,14 +1,14 @@
 package com.northcastle.spring.jobs.data.entity;
 import java.sql.Date;
 
-import jakarta.persistence.CascadeType;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.PrimaryKeyJoinColumn;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.ToString;
@@ -23,20 +23,25 @@ public class Posting {
 
 	@Id
 	@Column(name="posting_id")
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "posting_generator")
+	@SequenceGenerator(name = "posting_generator", sequenceName = "posting_seq", allocationSize = 50, initialValue = 10)
 	private Long id;
 
 	@Column(name="posting_name")
-	private String name;
+	private String postingName;
 
-	@Column(name="posting_ref")
-	private String referenceID;
+	@Column(name="posting_ref",nullable = true)
+	private String postingRef;
 
-	@Column(name="posting_rank")
-	private String sort;
+	@Column(name="posting_url")
+	private String postingUrl;
+	
+	@Column(name="posting_priority")
+	private Long postingPriority;
 
 	@Column(name="posting_date")
-	private Date date;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private Date postingDate;
 
 	@Column(name="company_name")
 	private String companyName;
@@ -44,8 +49,11 @@ public class Posting {
 	@Column(name="company_address")
 	private String companyAddress;
 	
-	@OneToOne(cascade=CascadeType.ALL)
-	@PrimaryKeyJoinColumn(name="app_id")
-	private Application appId;
+	@Column(name="app_date",nullable = true)
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private Date appDate;
+
+	@Column(name="app_status")
+	private String appStatus;
 
 }

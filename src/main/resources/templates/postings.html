@@ -20,6 +20,7 @@
 					<th scope="col">Date</th>
 					<th scope="col">Position</th>
 					<th scope="col">Company</th>
+					<th scope="col">URL</th>
 					<th scope="col">Status</th>
 					<th scope="col"></th>
 				</tr>
@@ -27,10 +28,11 @@
 			<tbody>
 				<tr th:each="i : ${#numbers.sequence(postings.size() - 1,0,-1)}"
 					th:with="posting=${postings[i]}">
-					<td th:text="${posting.date}">Posting Date</td>
-					<td th:text="${posting.name}">Position</td>
+					<td th:text="${posting.postingDate}">Posting Date</td>
+					<td th:text="${posting.postingName}">Position</td>
 					<td th:text="${posting.companyName}">Company</td>
-					<td th:text="${posting.appId.status}">(status)</td>
+					<td><a href="https://www.google.com" th:href="${posting.postingUrl}" target="_blank">Posting Link</a></td>
+					<td th:text="${posting.appStatus}">(status)</td>
 					<td>
 						<a class="btn btn-primary" href="#" th:href="@{/postings/view/{id}(id=${posting.id})}">Details</a>
 					</td>
@@ -38,7 +40,7 @@
 			</tbody>
 		</table>
 		<div>
-		
+		<a class="btn btn-primary" href="/postings/new">New Posting</a>
 		</div>
 	</div>
 	<script
