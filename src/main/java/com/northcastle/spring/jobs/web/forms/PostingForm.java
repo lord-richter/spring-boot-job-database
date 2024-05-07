@@ -1,11 +1,11 @@
 package com.northcastle.spring.jobs.web.forms;
 
-import java.sql.Date;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class PostingForm {
+
 
 	@NotNull(message = "Posting name cannot be empty")
 	@Size(min=2,max=64)
@@ -29,8 +30,8 @@ public class PostingForm {
 	@Max(10)
 	private Long postingPriority=1L;
 
-	@PastOrPresent
-	private Date postingDate = new Date(System.currentTimeMillis());
+	@NotNull
+	private String postingDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date(System.currentTimeMillis()));
 
 	@NotNull(message = "Company name cannot be empty")
 	@Size(min=2,max=64)	

@@ -1,15 +1,20 @@
 package com.northcastle.spring.jobs.web.controller;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,7 +23,6 @@ import org.springframework.web.server.ResponseStatusException;
 import com.northcastle.spring.jobs.data.entity.Posting;
 import com.northcastle.spring.jobs.data.repository.PostingRepository;
 import com.northcastle.spring.jobs.web.forms.PostingForm;
-import com.northcastle.spring.jobs.web.forms.UpdateForm;
 
 import jakarta.validation.Valid;
 
@@ -35,7 +39,13 @@ public class PostingController {
 	public static final String CLOSED = "Closed";
 
 	public static List<String> STATUSLIST = Arrays.asList(PENDING,APPLIED,INTERVIEW,REJECTED,CLOSED);
+	
+	@Value(value = "New Posting Succeeded!")
+	String newPostingMessage;
 
+	@Value(value = "Update Posting Succeeded!")
+	String updatePostingMessage;
+	
 	public PostingController(PostingRepository postingRepository) {
 		this.postingRepository = postingRepository;
 	}
@@ -79,6 +89,8 @@ public class PostingController {
 		// circle back on errors
 		if (bindingResult.hasErrors()) {
 			model.addAttribute("posting",posting);
+			model.addAttribute("statuslist",new ArrayList<String>(STATUSLIST));
+			model.addAttribute("module", "postings");
 			return "newposting";
 		}
 		
@@ -92,13 +104,14 @@ public class PostingController {
 		newPosting.setPostingPriority(posting.getPostingPriority());
 		newPosting.setPostingRef(posting.getPostingRef());
 		newPosting.setAppDate(null);
+		newPosting.setAppStatusUrl(null);
 		newPosting.setAppStatus(PENDING);
 		
-		model.addAttribute("posting",newPosting);
-
 		model.asMap().forEach((k,v)->{System.out.println(k+" = "+v);});
 		
 		postingRepository.save(newPosting);
+		model.addAttribute("posting",newPosting);
+		model.addAttribute("message",newPostingMessage);
 		return "newpostingsuccess";
 	}
 	
@@ -112,53 +125,74 @@ public class PostingController {
 		}
 		
 		Posting posting = posting_reference.get();
-		UpdateForm updateForm = new UpdateForm();
+		Posting editposting = new Posting();
+		System.out.println("editPosting");
+		System.out.println(posting);
+		BeanUtils.copyProperties(posting, editposting);
+		System.out.println(editposting);
 		
-		updateForm.setPostingName(posting.getPostingName());
-		updateForm.setCompanyName(posting.getCompanyName());
-		updateForm.setCompanyAddress(posting.getCompanyAddress());
-		updateForm.setPostingPriority(posting.getPostingPriority());
-		updateForm.setPostingRef(posting.getPostingRef());
-		updateForm.setPostingUrl(posting.getPostingUrl());
-		updateForm.setPostingDate(posting.getPostingDate());
-		updateForm.setAppDate(posting.getAppDate());
-		updateForm.setAppStatus(posting.getAppStatus());
-		
-		model.addAttribute("posting",updateForm);
+		model.addAttribute("posting",editposting);
 		model.addAttribute("statuslist",new ArrayList<String>(STATUSLIST));
 		model.addAttribute("module", "postings");
+		System.out.println("model:");
 		model.asMap().forEach((k,v)->{System.out.println(k+" = "+v);});
 		return "editposting";
 	}
 
 	@PostMapping("/edit/{id}")
-	public String updatePosting(@PathVariable("id") long postingId, @Valid UpdateForm posting, BindingResult bindingResult, Model model) {
-		System.out.println("submitPosting");
+	public String updatePosting(@PathVariable("id") Long postingId, @Valid @ModelAttribute("Posting") Posting posting, BindingResult bindingResult, Model model) {
+		System.out.println("updatePosting");
+		System.out.println(postingId);
 		System.out.println(posting);
+		System.out.println(bindingResult);
+		
+		
+		
 		// circle back on errors
 		if (bindingResult.hasErrors()) {
 			model.addAttribute("posting",posting);
-			return "newposting";
+			model.addAttribute("statuslist",new ArrayList<String>(STATUSLIST));
+			model.addAttribute("module", "postings");			
+			return "editposting";
 		}
 		
-		// save
-		Posting newPosting = new Posting();
-		newPosting.setPostingName(posting.getPostingName());
-		newPosting.setCompanyName(posting.getCompanyName());
-		newPosting.setCompanyAddress(posting.getCompanyAddress());
-		newPosting.setPostingDate(posting.getPostingDate());
-		newPosting.setPostingUrl(posting.getPostingUrl());
-		newPosting.setPostingPriority(posting.getPostingPriority());
-		newPosting.setPostingRef(posting.getPostingRef());
-		newPosting.setAppDate(null);
-		newPosting.setAppStatus(PENDING);
-		
-		model.addAttribute("posting",newPosting);
+		Optional<Posting> existing_ref = postingRepository.findById(postingId);
+		if (existing_ref.isPresent()) {
+			Posting existing = existing_ref.get();
+			System.out.println("Found: "+existing);
+			
+			// copy date over
+			// Note: this does not overwrite id or postingDate
+			existing.setPostingName(posting.getPostingName());
+			existing.setCompanyName(posting.getCompanyName());
+			existing.setCompanyAddress(posting.getCompanyAddress());
+			existing.setPostingPriority(posting.getPostingPriority());
+			existing.setPostingRef(posting.getPostingRef());
+			existing.setPostingUrl(posting.getPostingUrl());
+			existing.setAppStatusUrl(posting.getAppStatusUrl());
+			// if status changed
+			if (!existing.getAppStatus().equals(posting.getAppStatus())) {
+				// if previously Pending, set the application date to now
+				if (existing.getAppStatus().equals(PENDING)) {
+					existing.setAppDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date(System.currentTimeMillis())));
+				}
+				existing.setAppStatus(posting.getAppStatus());
+			}
+			existing.setAppStatusUrl(posting.getAppStatusUrl());
+			
+			System.out.println("Updated record:");
+			System.out.println(existing);
+			
+			model.addAttribute("message",updatePostingMessage);
+			
+			model.asMap().forEach((k,v)->{System.out.println(k+" = "+v);});
+			
+			model.addAttribute("posting",postingRepository.save(existing));
+			return "newpostingsuccess";
 
-		model.asMap().forEach((k,v)->{System.out.println(k+" = "+v);});
+		}
 		
-		postingRepository.save(newPosting);
-		return "newpostingsuccess";
+		return "error";
 	}
 	
 }

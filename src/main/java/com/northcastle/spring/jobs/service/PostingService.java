@@ -14,5 +14,4 @@ public class PostingService {
 		this.postingRepository = postingRepository;
 	}
 
-
 }

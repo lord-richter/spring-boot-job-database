@@ -1,7 +1,5 @@
 package com.northcastle.spring.jobs.service.model;
 
-import java.sql.Date;
-
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -11,13 +9,14 @@ import lombok.ToString;
 @ToString
 public class PostingModel {
 	private Long id;
-	private String name;
-	private String referenceID;
-	private String sort;
-	private String url;
-	private Date date;
+	private String postingName;
+	private String postingRef;
+	private String postingPriority;
+	private String postingUrl;
+	private String postingDate;
 	private String companyName;
 	private String companyAddress;
-	private Date appDate;
+	private String appDate;
 	private String appStatus;
+	private String appStatusUrl;
 }
