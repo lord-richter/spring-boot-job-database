@@ -3,6 +3,7 @@ target/
 release/
 private*
 private*/
+**/Private*
 maven*
 mvnw*
 .mvn/

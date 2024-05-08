@@ -13,8 +13,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class PostingForm {
-
-
+	
 	@NotNull(message = "Posting name cannot be empty")
 	@Size(min=2,max=64)
 	private String postingName;
@@ -41,4 +40,31 @@ public class PostingForm {
 	@Size(min=2,max=64)	
 	private String companyAddress;
 
+	/**
+	 * Constructor for auditing and testing.
+	 * Date is set to today.
+	 * @param postingName
+	 * @param postingRef
+	 * @param postingUrl
+	 * @param postingPriority
+	 * @param companyName
+	 * @param companyAddress
+	 */
+	public PostingForm(@NotNull(message = "Posting name cannot be empty") @Size(min = 2, max = 64) String postingName,
+			@Size(max = 20) String postingRef,
+			@NotNull(message = "Posting URL cannot be empty") @Size(max = 128) String postingUrl,
+			@Min(1) @Max(10) Long postingPriority,
+			@NotNull(message = "Company name cannot be empty") @Size(min = 2, max = 64) String companyName,
+			@NotNull(message = "Company location cannot be empty") @Size(min = 2, max = 64) String companyAddress) {
+		super();
+		this.postingName = postingName;
+		this.postingRef = postingRef;
+		this.postingUrl = postingUrl;
+		this.postingPriority = postingPriority;
+		this.companyName = companyName;
+		this.companyAddress = companyAddress;
+	}
+
+	
+	
 }

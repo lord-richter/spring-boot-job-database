@@ -1,4 +1,6 @@
 package com.northcastle.spring.jobs.data.entity;
+import com.northcastle.spring.jobs.web.forms.PostingForm;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -10,7 +12,9 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 
@@ -19,7 +23,33 @@ import lombok.ToString;
 @Table(name="posting")
 @Data
 @ToString
+@NoArgsConstructor
+@AllArgsConstructor
 public class Posting {
+	
+	public static final String PENDING = "Pending";
+	public static final String APPLIED = "Applied";
+	public static final String INTERVIEW = "Interview";
+	public static final String REJECTED = "Rejected";
+	public static final String CLOSED = "Closed";
+	
+	/**
+	 * Copy new posting to posting format
+	 * @param newPosting
+	 */
+	public Posting(PostingForm posting) {
+		this.id = null;
+		this.postingName = posting.getPostingName();
+		this.postingRef = posting.getPostingRef();
+		this.postingUrl = posting.getPostingUrl();
+		this.postingPriority = posting.getPostingPriority();
+		this.postingDate = posting.getPostingDate();
+		this.companyName = posting.getCompanyName();
+		this.companyAddress = posting.getCompanyAddress();
+		this.appDate = null;
+		this.appStatus = PENDING;
+		this.appStatusUrl = null;
+	}
 
 	@Id
 	@Column(name="posting_id")
