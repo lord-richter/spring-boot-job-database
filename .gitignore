@@ -3,6 +3,7 @@ target/
 release/
 private*
 private*/
+**/Private*
 maven*
 mvnw*
 .mvn/
@@ -37,3 +38,4 @@ build/
 
 ### VS Code ###
 .vscode/
+/test.csv
