@@ -1,7 +1,7 @@
 CREATE SCHEMA IF NOT EXISTS JOB;
 
 CREATE TABLE IF NOT EXISTS JOB.POSTING(
-  POSTING_ID BIGSERIAL PRIMARY KEY,
+  POSTING_ID UUID PRIMARY KEY,
   POSTING_NAME VARCHAR(64),
   POSTING_REF VARCHAR(20),
   POSTING_URL VARCHAR(128),
@@ -20,17 +20,17 @@ CREATE INDEX IF NOT EXISTS IDX_APP_DATE_ ON JOB.POSTING(APP_DATE);
 
 
 INSERT INTO JOB.POSTING (POSTING_ID, POSTING_NAME, POSTING_REF, POSTING_URL, POSTING_PRIORITY, POSTING_DATE,COMPANY_NAME,COMPANY_ADDRESS,APP_DATE, APP_STATUS, APP_STATUS_URL) 
-	VALUES (1,'Fisherman','REF0001','http://www.google.com',1,'2024-05-01','The Lobster Shop','Wilmington, NC','2024-05-02','Applied','http://joblookup.com');
+	VALUES ('ecf1bde1-3849-4b38-94e6-f8a43a89f816','Fisherman','REF0001','http://www.google.com',1,'2024-05-01','The Lobster Shop','Wilmington, NC','2024-05-02','Applied','http://joblookup.com');
 
 INSERT INTO JOB.POSTING (POSTING_ID, POSTING_NAME, POSTING_REF, POSTING_URL, POSTING_PRIORITY, POSTING_DATE,COMPANY_NAME,COMPANY_ADDRESS,APP_DATE, APP_STATUS, APP_STATUS_URL) 
-	VALUES (2,'Pilot','R0001121','http://www.google.com',1,'2024-05-03','The Lobster Liquidators','Wilmington, NC','2024-05-05','Rejected','http://joblookup.com');
+	VALUES ('79aeeb2f-721e-4c0a-8a24-063e328a097d','Pilot','R0001121','http://www.google.com',1,'2024-05-03','The Lobster Liquidators','Wilmington, NC','2024-05-05','Rejected','http://joblookup.com');
 
 INSERT INTO JOB.POSTING (POSTING_ID, POSTING_NAME, POSTING_REF, POSTING_URL, POSTING_PRIORITY, POSTING_DATE,COMPANY_NAME,COMPANY_ADDRESS,APP_DATE, APP_STATUS, APP_STATUS_URL) 
-	VALUES (3,'Mechanic','P0023','http://www.google.com',1,'2024-05-05','The Lobster Claw','Wilmington, NC',NULL,'Pending',NULL);
+	VALUES ('a3450c68-fd19-4a7d-b4f3-72119a4bf47d','Mechanic','P0023','http://www.google.com',1,'2024-05-05','The Lobster Claw','Wilmington, NC',NULL,'Pending',NULL);
 
 INSERT INTO JOB.POSTING (POSTING_ID, POSTING_NAME, POSTING_REF, POSTING_URL, POSTING_PRIORITY, POSTING_DATE,COMPANY_NAME,COMPANY_ADDRESS,APP_DATE, APP_STATUS, APP_STATUS_URL) 
-	VALUES (4,'Professional Fish Cleaner','PFC002','http://www.surfcity.com',1,'2024-05-06','No Lobsters Allowed','Surf City, NC',NULL,'Pending',NULL);
+	VALUES ('d2a3f02d-7929-41f0-b8d6-6a68af9d99e5','Professional Fish Cleaner','PFC002','http://www.surfcity.com',1,'2024-05-06','No Lobsters Allowed','Surf City, NC',NULL,'Pending',NULL);
 	
 INSERT INTO JOB.POSTING (POSTING_ID, POSTING_NAME, POSTING_REF, POSTING_URL, POSTING_PRIORITY, POSTING_DATE,COMPANY_NAME,COMPANY_ADDRESS,APP_DATE, APP_STATUS, APP_STATUS_URL) 
-	VALUES (5,'Apprentice Fish Cleaner','PFC001','http://www.surfcity.com',2,'2024-05-06','No Lobsters Allowed','Surf City, NC',NULL,'Pending',NULL);
+	VALUES ('613de372-c0f0-4d12-bb94-27d3320c59ec','Apprentice Fish Cleaner','PFC001','http://www.surfcity.com',2,'2024-05-06','No Lobsters Allowed','Surf City, NC',NULL,'Pending',NULL);
 		

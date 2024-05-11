@@ -1,12 +1,11 @@
 package com.northcastle.spring.jobs.data.entity;
+import java.util.UUID;
+
 import com.northcastle.spring.jobs.web.forms.PostingForm;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -53,9 +52,7 @@ public class Posting {
 
 	@Id
 	@Column(name="posting_id")
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "posting_generator")
-	@SequenceGenerator(name = "posting_generator", sequenceName = "posting_seq", allocationSize = 50, initialValue = 10)
-	private Long id;
+	private UUID id;
 
 	@Column(name="posting_name")
 	@NotNull(message = "Posting name cannot be empty")

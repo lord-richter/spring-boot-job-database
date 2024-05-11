@@ -1,5 +1,7 @@
 package com.northcastle.spring.jobs.service.model;
 
+import java.util.UUID;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -8,7 +10,7 @@ import lombok.ToString;
 @Setter
 @ToString
 public class PostingModel {
-	private Long id;
+	private UUID id;
 	private String postingName;
 	private String postingRef;
 	private String postingPriority;

@@ -1,11 +1,10 @@
 package com.northcastle.spring.jobs.web.controller;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,10 +13,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.northcastle.spring.jobs.data.entity.Posting;
@@ -59,7 +60,7 @@ public class PostingController {
 	}
 
 	@GetMapping(path = "/view/{id}")
-	public String getPosting(@PathVariable("id") long postingId, Model model) {
+	public String getPosting(@PathVariable("id") UUID postingId, Model model) {
 		Posting posting = postingService.getPosting(postingId);
 		model.addAttribute("posting", posting);
 		model.addAttribute("statuslist",new ArrayList<String>(STATUSLIST));
@@ -76,14 +77,15 @@ public class PostingController {
 	}
 
 	@PostMapping("/new")
-	public String submitNewPosting(@Valid PostingForm posting, BindingResult bindingResult, Model model) {
-		log.info("submitPosting");
-		log.info(posting.toString());
+	@ResponseStatus(HttpStatus.CREATED)
+	public String submitNewPosting(@Valid @RequestBody PostingForm posting, BindingResult bindingResult, Model model) {
+		log.info("submitNewPostingController: "+posting);
 		// circle back on form errors
 		if (bindingResult.hasErrors()) {
 			model.addAttribute("posting",posting);
 			model.addAttribute("statuslist",new ArrayList<String>(STATUSLIST));
 			model.addAttribute("module", "postings");
+			log.warn("submitNewPostingController: Has errors = "+bindingResult);
 			return "newposting";
 		}
 		
@@ -93,7 +95,7 @@ public class PostingController {
 	}
 	
 	@GetMapping("/edit/{id}")
-	public String editPosting(@PathVariable("id") long postingId, Model model) {
+	public String editPosting(@PathVariable("id") UUID postingId, Model model) {
 		Optional<Posting> posting_reference = this.postingRepository.findById(postingId);
 		if (posting_reference.isEmpty()) {
 			throw new ResponseStatusException(
@@ -103,25 +105,22 @@ public class PostingController {
 		
 		Posting posting = posting_reference.get();
 		Posting editposting = new Posting();
-		log.info("editPosting");
-		log.info(posting.toString());
+		log.info("editPostingController(): "+posting);
 		BeanUtils.copyProperties(posting, editposting);
-		log.info(editposting.toString());
+		log.info("editPostingController(): "+editposting);
 		
 		model.addAttribute("posting",editposting);
 		model.addAttribute("statuslist",new ArrayList<String>(STATUSLIST));
 		model.addAttribute("module", "postings");
-		log.info("model:");
-		model.asMap().forEach((k,v)->{log.info(k+" = "+v);});
+		model.asMap().forEach((k,v)->{log.info("editPostingController(): "+k+" = "+v);});
 		return "editposting";
 	}
 
-	@PostMapping("/edit/{id}")
-	public String updatePosting(@PathVariable("id") Long postingId, @Valid @ModelAttribute("Posting") Posting posting, BindingResult bindingResult, Model model) {
-		log.info("updatePosting");
-		log.info(postingId.toString());
-		log.info(posting.toString());
-		log.info(bindingResult.toString());
+	@PutMapping("/edit/{id}")
+	public String updatePosting(@PathVariable("id") UUID postingId, @Valid @RequestBody Posting posting, BindingResult bindingResult, Model model) {
+		log.info("updatePostingController() :"+postingId);
+		log.info("updatePostingController() :"+posting);
+		log.info("updatePostingController() :"+bindingResult);
 		
 		
 		
@@ -129,47 +128,15 @@ public class PostingController {
 		if (bindingResult.hasErrors()) {
 			model.addAttribute("posting",posting);
 			model.addAttribute("statuslist",new ArrayList<String>(STATUSLIST));
-			model.addAttribute("module", "postings");			
+			model.addAttribute("module", "postings");	
+			log.warn("updatePostingController: Has errors = "+bindingResult);
 			return "editposting";
 		}
 		
-		Optional<Posting> existing_ref = postingRepository.findById(postingId);
-		if (existing_ref.isPresent()) {
-			Posting existing = existing_ref.get();
-			log.info("Found: "+existing);
-			
-			// copy date over
-			// Note: this does not overwrite id or postingDate
-			existing.setPostingName(posting.getPostingName());
-			existing.setCompanyName(posting.getCompanyName());
-			existing.setCompanyAddress(posting.getCompanyAddress());
-			existing.setPostingPriority(posting.getPostingPriority());
-			existing.setPostingRef(posting.getPostingRef());
-			existing.setPostingUrl(posting.getPostingUrl());
-			existing.setAppStatusUrl(posting.getAppStatusUrl());
-			// if status changed
-			if (!existing.getAppStatus().equals(posting.getAppStatus())) {
-				// if previously Pending, set the application date to now
-				if (existing.getAppStatus().equals(Posting.PENDING)) {
-					existing.setAppDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date(System.currentTimeMillis())));
-				}
-				existing.setAppStatus(posting.getAppStatus());
-			}
-			existing.setAppStatusUrl(posting.getAppStatusUrl());
-			
-			log.info("Updated record:");
-			log.info(existing.toString());
-			
-			model.addAttribute("message",updatePostingMessage);
-			
-			model.asMap().forEach((k,v)->{log.info(k+" = "+v);});
-			
-			model.addAttribute("posting",postingRepository.save(existing));
-			return "newpostingsuccess";
-
-		}
-		
-		return "error";
+		model.addAttribute("message",updatePostingMessage);
+		model.addAttribute("posting",postingService.updatePosting(posting));
+		model.asMap().forEach((k,v)->{log.info("updatePostingController() : "+k+" = "+v);});
+		return "newpostingsuccess";
 	}
 	
 }
