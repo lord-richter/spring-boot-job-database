@@ -8,14 +8,17 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Data
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @NoArgsConstructor
 public class PostingForm {
 	
 	@NotNull(message = "Posting name cannot be empty")
 	@Size(min=2,max=64)
+	@EqualsAndHashCode.Include
 	private String postingName;
 
 	@Size(max=20)
@@ -30,10 +33,12 @@ public class PostingForm {
 	private Long postingPriority=1L;
 
 	@NotNull
+	@EqualsAndHashCode.Include
 	private String postingDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date(System.currentTimeMillis()));
 
 	@NotNull(message = "Company name cannot be empty")
 	@Size(min=2,max=64)	
+	@EqualsAndHashCode.Include
 	private String companyName;
 
 	@NotNull(message = "Company location cannot be empty")

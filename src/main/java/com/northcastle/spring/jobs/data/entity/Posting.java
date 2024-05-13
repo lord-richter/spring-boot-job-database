@@ -13,15 +13,15 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 
 
 @Entity
 @Table(name="posting")
 @Data
-@ToString
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @NoArgsConstructor
 @AllArgsConstructor
 public class Posting {
@@ -52,6 +52,7 @@ public class Posting {
 
 	@Id
 	@Column(name="posting_id")
+	@EqualsAndHashCode.Include
 	private UUID id;
 
 	@Column(name="posting_name")
@@ -74,7 +75,6 @@ public class Posting {
 	private Long postingPriority;
 
 	@Column(name="posting_date")
-	//@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private String postingDate;
 
 	@Column(name="company_name")
@@ -88,12 +88,11 @@ public class Posting {
 	private String companyAddress;
 	
 	@Column(name="app_date",nullable = true)
-	//@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private String appDate;
 
 	@Column(name="app_status")
 	@NotNull(message = "Status cannot be empty")
-	private String appStatus;
+	private String appStatus = PENDING;
 	
 	@Column(name="app_status_url")
 	@Size(max=128)	
