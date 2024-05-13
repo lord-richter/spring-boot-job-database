@@ -17,6 +17,7 @@
             <br/><p class="card-text">
             Posting: <a target="_blank" th:href="${posting.postingUrl}" th:text="${posting.postingUrl}">Link</a><br/>
             Reference: <span th:text="${posting.postingRef}">(ref)</span><br/>
+            Comment: <span th:text="${posting.comment}">(comment)</span><br/>
             Status: <span th:text="${posting.appStatus}">(status)</span><br/>
             <span th:text="${posting.appDate} ? 'Application date: ' + ${posting.appDate}">(date)</span>
             </p>

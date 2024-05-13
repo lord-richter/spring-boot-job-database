@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.sql.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -27,8 +28,6 @@ import lombok.extern.slf4j.Slf4j;
 @AutoConfigureTestDatabase(replace = Replace.ANY)
 @Slf4j
 public class PostingServiceIntegrationTest {
-
-	
 
 	@Autowired
 	private PostingService postingService;
@@ -78,7 +77,8 @@ public class PostingServiceIntegrationTest {
 				"postingRef","DR001",
 				"postingUrl","https://surfcity.com",
 				"companyName","No Lobsters Allowed",
-				"companyAddress","Surf City, NC"
+				"companyAddress","Surf City, NC",
+				"comment","This is a comment"
 				);
 				
 		
@@ -88,7 +88,8 @@ public class PostingServiceIntegrationTest {
 				fauxData.get("postingUrl"),
 				1L,
 				fauxData.get("companyName"),
-				fauxData.get("companyAddress")
+				fauxData.get("companyAddress"),
+				fauxData.get("comment")
 				);
 		
 		Posting posting = this.postingService.addPosting(postingForm);
@@ -104,6 +105,7 @@ public class PostingServiceIntegrationTest {
 		assertEquals(fauxData.get("postingUrl"), posting.getPostingUrl());
 		assertEquals(fauxData.get("companyName"), posting.getCompanyName());
 		assertEquals(fauxData.get("companyAddress"), posting.getCompanyAddress());
+		assertEquals(fauxData.get("comment"), posting.getComment());
 		assertEquals(Posting.PENDING, posting.getAppStatus());
 		
 		log.info("TEST.addPosting(): "+posting);
@@ -112,7 +114,7 @@ public class PostingServiceIntegrationTest {
 		this.postingService.deletePosting(posting.getId());
 	}
 
-	@Test
+	@Test 
 	void updatePosting_PendingToApplied(){
 		// id matches existing record from data.sql
 		Posting existing = postingService.getPosting(Convert.stringToUUID("a3450c68-fd19-4a7d-b4f3-72119a4bf47d"));
@@ -120,10 +122,11 @@ public class PostingServiceIntegrationTest {
 		existing.setPostingName("Mechanic II");
 		existing.setCompanyName("The Lobster Tank");
 		existing.setCompanyAddress("Southport, NC");
+		existing.setComment("This is the next comment");
 		existing.setPostingRef("P0023A");
 		existing.setPostingPriority(2L);
 		existing.setPostingUrl("http://www.openai.com");
-		existing.setPostingDate("2024-05-01");
+		existing.setPostingDate(Date.valueOf("2024-05-01"));
 		existing.setAppStatusUrl("http://www.openai.com/status");
 		existing.setAppStatus(Posting.APPLIED);
 		
@@ -143,6 +146,7 @@ public class PostingServiceIntegrationTest {
 		assertEquals(existing.getPostingUrl(), posting.getPostingUrl());
 		assertEquals(existing.getCompanyName(), posting.getCompanyName());
 		assertEquals(existing.getCompanyAddress(), posting.getCompanyAddress());
+		assertEquals(existing.getComment(), posting.getComment());
 		assertEquals(existing.getAppStatus(), posting.getAppStatus());
 		assertEquals(existing.getAppStatusUrl(), posting.getAppStatusUrl());
 
@@ -172,6 +176,7 @@ public class PostingServiceIntegrationTest {
 		assertEquals(existing.getPostingUrl(), posting.getPostingUrl());
 		assertEquals(existing.getCompanyName(), posting.getCompanyName());
 		assertEquals(existing.getCompanyAddress(), posting.getCompanyAddress());
+		assertEquals(existing.getComment(), posting.getComment());
 		assertEquals(existing.getAppStatus(), posting.getAppStatus());
 		assertEquals(existing.getAppDate(), posting.getAppDate());
 		assertEquals(existing.getAppStatusUrl(), posting.getAppStatusUrl());
@@ -201,6 +206,7 @@ public class PostingServiceIntegrationTest {
 		assertEquals(existing.getPostingUrl(), posting.getPostingUrl());
 		assertEquals(existing.getCompanyName(), posting.getCompanyName());
 		assertEquals(existing.getCompanyAddress(), posting.getCompanyAddress());
+		assertEquals(existing.getComment(), posting.getComment());
 		assertEquals(Posting.PENDING, posting.getAppStatus());
 		
 	}

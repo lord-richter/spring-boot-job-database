@@ -1,4 +1,5 @@
 package com.northcastle.spring.jobs.data.entity;
+import java.sql.Date;
 import java.util.UUID;
 
 import com.northcastle.spring.jobs.web.forms.PostingForm;
@@ -45,6 +46,7 @@ public class Posting {
 		this.postingDate = posting.getPostingDate();
 		this.companyName = posting.getCompanyName();
 		this.companyAddress = posting.getCompanyAddress();
+		this.comment = posting.getComment();
 		this.appDate = null;
 		this.appStatus = PENDING;
 		this.appStatusUrl = null;
@@ -66,7 +68,7 @@ public class Posting {
 
 	@Column(name="posting_url")
 	@NotNull(message = "Posting URL cannot be empty")
-	@Size(max=128)	
+	@Size(max=256)	
 	private String postingUrl;
 	
 	@Column(name="posting_priority")
@@ -75,7 +77,7 @@ public class Posting {
 	private Long postingPriority;
 
 	@Column(name="posting_date")
-	private String postingDate;
+	private Date postingDate;
 
 	@Column(name="company_name")
 	@NotNull(message = "Company name cannot be empty")
@@ -87,15 +89,20 @@ public class Posting {
 	@Size(min=2,max=64)		
 	private String companyAddress;
 	
+	@Column(name="comment")
+	@Size(max=512)	
+	private String comment;	
+	
 	@Column(name="app_date",nullable = true)
-	private String appDate;
+	private Date appDate;
 
 	@Column(name="app_status")
 	@NotNull(message = "Status cannot be empty")
 	private String appStatus = PENDING;
 	
 	@Column(name="app_status_url")
-	@Size(max=128)	
+	@Size(max=256)	
 	private String appStatusUrl;
+
 
 }

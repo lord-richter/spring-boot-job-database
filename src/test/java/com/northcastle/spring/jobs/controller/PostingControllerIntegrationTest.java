@@ -7,12 +7,15 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.sql.Date;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -32,6 +35,7 @@ public class PostingControllerIntegrationTest {
 	MockMvc mockMvc;
 
 	@Test
+	@WithMockUser(username = "user1", password = "pwd", roles = "ADMIN")
 	void getAllPostings() throws Exception {
 		log.debug("TEST.getAllPostings(): "+mockMvc.perform(get("/postings"))
 		.andExpect(status().isOk())
@@ -43,6 +47,7 @@ public class PostingControllerIntegrationTest {
 	}
 
 	@Test
+	@WithMockUser(username = "user1", password = "pwd", roles = "ADMIN")
 	void getPosting() throws Exception {
 		log.debug("TEST.getPosting(): "+ mockMvc.perform(get("/postings/view/ecf1bde1-3849-4b38-94e6-f8a43a89f816"))		
 		.andExpect(status().isOk())
@@ -52,6 +57,7 @@ public class PostingControllerIntegrationTest {
 	}
 
 	@Test
+	@WithMockUser(username = "user1", password = "pwd", roles = "ADMIN")
 	void getPosting_NotFound() throws Exception {
 		log.debug("TEST.getPosting_notFound(): "+ mockMvc.perform(get("/postings/view/ecf1bde1-3849-4b38-94e6-f8a43a89f700"))
 		.andExpect(status().isNotFound())
@@ -59,6 +65,7 @@ public class PostingControllerIntegrationTest {
 	}
 
 	@Test
+	@WithMockUser(username = "user1", password = "pwd", roles = "ADMIN")
 	void getNewPosting() throws Exception {
 		log.debug("TEST.getNewPosting(): "+mockMvc.perform(get("/postings/new"))
 		.andExpect(status().isOk())
@@ -68,8 +75,9 @@ public class PostingControllerIntegrationTest {
 	
 	
 	@Test
+	@WithMockUser(username = "user1", password = "pwd", roles = "ADMIN")
 	void putNewPosting() throws Exception {
-		PostingForm posting = new PostingForm("Secretary","SEC001","http://www.facebook.com",3L,"Lobster Receptionist Service","Southport, NC");
+		PostingForm posting = new PostingForm("Secretary","SEC001","http://www.facebook.com",3L,"Lobster Receptionist Service","Southport, NC","No comment");
 		ObjectMapper mapper = new ObjectMapper();
 		String jsonString = mapper.writeValueAsString(posting);
 		log.info("TEST.putNewPosting(): "+jsonString);
@@ -82,8 +90,9 @@ public class PostingControllerIntegrationTest {
 	}
 	
 	@Test
+	@WithMockUser(username = "user1", password = "pwd", roles = "ADMIN")
 	void putNewPosting_BadRequest() throws Exception {
-		PostingForm posting = new PostingForm("Secretary","SEC001","http://www.facebook.com",300L,"Lobster Receptionist Service","Southport, NC");
+		PostingForm posting = new PostingForm("Secretary","SEC001","http://www.facebook.com",300L,"Lobster Receptionist Service","Southport, NC","No comment");
 		ObjectMapper mapper = new ObjectMapper();
 		String jsonString = mapper.writeValueAsString(posting);
 		log.info("TEST.putNewPosting_Bad(): "+jsonString);
@@ -97,6 +106,7 @@ public class PostingControllerIntegrationTest {
 	
 
 	@Test
+	@WithMockUser(username = "user1", password = "pwd", roles = "ADMIN")
 	void getEditPosting() throws Exception {
 		log.debug("TEST.getEditPosting(): "+mockMvc.perform(get("/postings/edit/a3450c68-fd19-4a7d-b4f3-72119a4bf47d"))
 		.andExpect(status().isOk())
@@ -105,6 +115,7 @@ public class PostingControllerIntegrationTest {
 	}	
 
 	@Test
+	@WithMockUser(username = "user1", password = "pwd", roles = "ADMIN")
 	void getEditPosting_NotFound() throws Exception {
 		log.debug("TEST.getEditPosting_NotFound(): "+ mockMvc.perform(get("/postings/edit/ecf1bde1-3849-4b38-94e6-f8a43a89f700"))
 		.andExpect(status().isNotFound())
@@ -112,6 +123,7 @@ public class PostingControllerIntegrationTest {
 	}	
 	
 	@Test
+	@WithMockUser(username = "user1", password = "pwd", roles = "ADMIN")
 	void putEditPosting() throws Exception {
 		Posting existing = new Posting();
 		existing.setId(Convert.stringToUUID("a3450c68-fd19-4a7d-b4f3-72119a4bf47d"));
@@ -121,7 +133,7 @@ public class PostingControllerIntegrationTest {
 		existing.setPostingRef("P0023");
 		existing.setPostingPriority(1L);
 		existing.setPostingUrl("http://www.google.com");
-		existing.setPostingDate("2024-05-05");
+		existing.setPostingDate(Date.valueOf("2024-05-05"));
 		existing.setAppDate(null);
 		existing.setAppStatusUrl(null);
 		existing.setAppStatus(Posting.PENDING);
@@ -138,6 +150,7 @@ public class PostingControllerIntegrationTest {
 	}
 
 	@Test
+	@WithMockUser(username = "user1", password = "pwd", roles = "ADMIN")
 	void putEditPosting_BadRequest() throws Exception {
 		Posting existing = new Posting();
 		existing.setId(Convert.stringToUUID("a3450c68-fd19-4a7d-b4f3-72119a4bf47d"));
@@ -147,7 +160,7 @@ public class PostingControllerIntegrationTest {
 		existing.setPostingRef("P0023");
 		existing.setPostingPriority(1L);
 		existing.setPostingUrl("http://www.google.com");
-		existing.setPostingDate("2024-05-05");
+		existing.setPostingDate(Date.valueOf("2024-05-05"));
 		existing.setAppDate(null);
 		existing.setAppStatusUrl(null);
 		existing.setAppStatus(null);

@@ -1,7 +1,8 @@
 package com.northcastle.spring.jobs.service;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.sql.Date;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -111,6 +112,7 @@ public class PostingService {
 		existing.setPostingDate(update.getPostingDate());
 		existing.setCompanyName(update.getCompanyName());
 		existing.setCompanyAddress(update.getCompanyAddress());
+		existing.setComment(update.getComment());
 		existing.setPostingPriority(update.getPostingPriority());
 		existing.setPostingRef(update.getPostingRef());
 		existing.setPostingUrl(update.getPostingUrl());
@@ -119,7 +121,7 @@ public class PostingService {
 		if (!existing.getAppStatus().equals(update.getAppStatus())) {
 			// if previously Pending, set the application date to now
 			if (existing.getAppStatus().equals(Posting.PENDING)) {
-				existing.setAppDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date(System.currentTimeMillis())));
+				existing.setAppDate(Date.valueOf(LocalDate.ofInstant(new java.util.Date().toInstant(), ZoneId.systemDefault())));
 			}
 			// status is always updated when changed
 			existing.setAppStatus(update.getAppStatus());
