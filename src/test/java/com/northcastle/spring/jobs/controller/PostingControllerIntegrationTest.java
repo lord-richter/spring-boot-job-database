@@ -33,40 +33,86 @@ public class PostingControllerIntegrationTest {
 
 	@Test
 	void getAllPostings() throws Exception {
-		mockMvc.perform(get("/postings"))
+		log.debug("TEST.getAllPostings(): "+mockMvc.perform(get("/postings"))
 		.andExpect(status().isOk())
 		.andExpect(content().string(containsString("Fisherman")))
 		.andExpect(content().string(containsString("Pilot")))
-		.andExpect(content().string(containsString("Professional Fish Cleaner")));
+		.andExpect(content().string(containsString("Professional Fish Cleaner")))
+		.andExpect(content().string(containsString("All Job Postings")))
+		.andReturn().getResponse().getContentAsString());
 	}
 
 	@Test
 	void getPosting() throws Exception {
-		mockMvc.perform(get("/postings/view/ecf1bde1-3849-4b38-94e6-f8a43a89f816"))
+		log.debug("TEST.getPosting(): "+ mockMvc.perform(get("/postings/view/ecf1bde1-3849-4b38-94e6-f8a43a89f816"))		
 		.andExpect(status().isOk())
-		.andExpect(content().string(containsString("Fisherman")));
+		.andExpect(content().string(containsString("Fisherman")))
+		.andExpect(content().string(containsString("Job Posting Details")))
+		.andReturn().getResponse().getContentAsString());
 	}
 
 	@Test
-	void getPosting_notFound() throws Exception {
-		mockMvc.perform(get("/postings/view/ecf1bde1-3849-4b38-94e6-f8a43a89f700"))
-		.andExpect(status().isNotFound());
+	void getPosting_NotFound() throws Exception {
+		log.debug("TEST.getPosting_notFound(): "+ mockMvc.perform(get("/postings/view/ecf1bde1-3849-4b38-94e6-f8a43a89f700"))
+		.andExpect(status().isNotFound())
+		.andReturn().getResponse().getContentAsString());
 	}
 
 	@Test
-	void addPosting() throws Exception {
+	void getNewPosting() throws Exception {
+		log.debug("TEST.getNewPosting(): "+mockMvc.perform(get("/postings/new"))
+		.andExpect(status().isOk())
+		.andExpect(content().string(containsString("New Job Posting")))
+		.andReturn().getResponse().getContentAsString());
+	}
+	
+	
+	@Test
+	void putNewPosting() throws Exception {
 		PostingForm posting = new PostingForm("Secretary","SEC001","http://www.facebook.com",3L,"Lobster Receptionist Service","Southport, NC");
 		ObjectMapper mapper = new ObjectMapper();
 		String jsonString = mapper.writeValueAsString(posting);
-		log.info("addPostingTest(): "+jsonString);
+		log.info("TEST.putNewPosting(): "+jsonString);
 		
-		mockMvc.perform(post("/postings/new").content(jsonString).contentType("application/json"))
+		log.debug("TEST.putNewPosting(): "+mockMvc.perform(post("/postings/new").content(jsonString).contentType("application/json"))
 		.andExpect(status().isCreated())
-		.andExpect(content().string(containsString(posting.getCompanyAddress())));
+		.andExpect(content().string(containsString(posting.getCompanyAddress())))
+		.andExpect(content().string(containsString("New Posting Succeeded!")))
+		.andReturn().getResponse().getContentAsString());
 	}
+	
+	@Test
+	void putNewPosting_BadRequest() throws Exception {
+		PostingForm posting = new PostingForm("Secretary","SEC001","http://www.facebook.com",300L,"Lobster Receptionist Service","Southport, NC");
+		ObjectMapper mapper = new ObjectMapper();
+		String jsonString = mapper.writeValueAsString(posting);
+		log.info("TEST.putNewPosting_Bad(): "+jsonString);
+		
+		log.debug("TEST.putNewPosting_Bad(): "+mockMvc.perform(post("/postings/new").content(jsonString).contentType("application/json"))
+		.andExpect(status().isCreated())
+		.andExpect(content().string(containsString(posting.getCompanyAddress())))
+		.andExpect(content().string(containsString("New Job Posting")))
+		.andReturn().getResponse().getContentAsString());
+	}
+	
 
 	@Test
-	void updatePosting() throws Exception {
+	void getEditPosting() throws Exception {
+		log.debug("TEST.getEditPosting(): "+mockMvc.perform(get("/postings/edit/a3450c68-fd19-4a7d-b4f3-72119a4bf47d"))
+		.andExpect(status().isOk())
+		.andExpect(content().string(containsString("Update Job Posting")))
+		.andReturn().getResponse().getContentAsString());
+	}	
+
+	@Test
+	void getEditPosting_NotFound() throws Exception {
+		log.debug("TEST.getEditPosting_NotFound(): "+ mockMvc.perform(get("/postings/edit/ecf1bde1-3849-4b38-94e6-f8a43a89f700"))
+		.andExpect(status().isNotFound())
+		.andReturn().getResponse().getContentAsString());
+	}	
+	
+	@Test
+	void putEditPosting() throws Exception {
 		Posting existing = new Posting();
 		existing.setId(Convert.stringToUUID("a3450c68-fd19-4a7d-b4f3-72119a4bf47d"));
 		existing.setPostingName("Mechanic");
@@ -82,25 +128,46 @@ public class PostingControllerIntegrationTest {
 		
 		ObjectMapper mapper = new ObjectMapper();
 		String jsonString = mapper.writeValueAsString(existing);
-		log.info("updatePostingTest(): "+jsonString);
-		mockMvc.perform(put("/postings/edit/a3450c68-fd19-4a7d-b4f3-72119a4bf47d").content(jsonString).contentType("application/json"))
+		log.info("TEST.putEditPosting(): "+jsonString);
+		log.debug("TEST.putEditPosting(): "+mockMvc.perform(put("/postings/edit/a3450c68-fd19-4a7d-b4f3-72119a4bf47d").content(jsonString).contentType("application/json"))
 		.andExpect(status().isOk())
 		.andExpect(content().string(containsString("Mechanic")))
-		.andExpect(content().string(containsString("Pending")));
+		.andExpect(content().string(containsString("Update Posting Succeeded!")))
+		.andExpect(content().string(containsString("Pending")))
+		.andReturn().getResponse().getContentAsString());
 	}
 
 	@Test
-	void updateCustomer_badRequest() throws Exception {
-		//    Customer customer = new Customer("c04ca077-8c40-4437-b77a-41f510f3f185","Jack","Bower","quam.quis.diam@facilisisfacilisis.org","(831) 996-1240","2 Rockefeller Avenue, Waco, TX 76796");
-		//    ObjectMapper mapper = new ObjectMapper();
-		//    String jsonString = mapper.writeValueAsString(customer);
-		//    this.mockMvc.perform(put("/customers/2b31469c-da3d-469f-9900-d00b5e4e352f").content(jsonString).contentType("application/json")).andExpect(status().isBadRequest());
+	void putEditPosting_BadRequest() throws Exception {
+		Posting existing = new Posting();
+		existing.setId(Convert.stringToUUID("a3450c68-fd19-4a7d-b4f3-72119a4bf47d"));
+		existing.setPostingName("Mechanic");
+		existing.setCompanyName("The Lobster Claw");
+		existing.setCompanyAddress("Wilmington, NC");
+		existing.setPostingRef("P0023");
+		existing.setPostingPriority(1L);
+		existing.setPostingUrl("http://www.google.com");
+		existing.setPostingDate("2024-05-05");
+		existing.setAppDate(null);
+		existing.setAppStatusUrl(null);
+		existing.setAppStatus(null);
+		
+		ObjectMapper mapper = new ObjectMapper();
+		String jsonString = mapper.writeValueAsString(existing);
+		log.info("TEST.putEditPosting_Bad(): "+jsonString);
+		log.debug("TEST.putEditPosting_Bad(): "+mockMvc.perform(put("/postings/edit/a3450c68-fd19-4a7d-b4f3-72119a4bf47d").content(jsonString).contentType("application/json"))
+		.andExpect(status().isOk())
+		.andExpect(content().string(containsString("Mechanic")))
+		.andExpect(content().string(containsString("Update Job Posting")))
+		.andExpect(content().string(containsString("Pending")))
+		.andReturn().getResponse().getContentAsString());
+
 	}
 
-	@Test
-	void deleteCustomer() throws Exception {
-		//    this.mockMvc.perform(delete("/customers/3b6c3ecc-fad7-49db-a14a-f396ed866e50")).andExpect(status().isResetContent());
-	}
+//	@Test
+//	void deletePosting() throws Exception {
+//		// unsupported operation in this version
+//	}
 }
 
 

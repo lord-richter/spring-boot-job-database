@@ -62,19 +62,21 @@ public class PostingService {
 	public Posting addPosting(PostingForm newPosting) {
 		// copy new posting to posting
 		Posting posting = new Posting(newPosting);
-		
-		if (posting.getId()==null) {
-			posting.setId(UUID.randomUUID());
-		}
+
+		// set the UUID for the new posting
+		posting.setId(UUID.randomUUID());
 		
 		// verify that UUID is not currently used
 		// if it is, just get a new one.  Limit this to 10 tries.
+		// JUnit will have issues testing this due to the unlikely nature of a duplicate
+		// happening during the test run.
 		boolean OK=false;
 		int looplimit = 10;
 		int loop = 0;
 		while (!OK && loop<looplimit) {
 			loop++;
 			Optional<Posting> checkUUID = postingRepository.findById(posting.getId());
+			// unit testing note: this is branch is not checked by JUnit:
 			if (checkUUID.isPresent()) {
 				posting.setId(UUID.randomUUID());
 			} else {
@@ -83,7 +85,7 @@ public class PostingService {
 		}
 		
 		// peek into data structure
-		log.info("addPostingService(): "+posting);
+		log.info("Service.addPosting(): "+posting);
 		
 		// return
 		return postingRepository.save(posting);
@@ -125,7 +127,7 @@ public class PostingService {
 		// status url is always updated to latest
 		existing.setAppStatusUrl(update.getAppStatusUrl());
 
-		log.info("updatePostingService: "+existing);
+		log.info("Service.updatePosting(): "+existing);
 
 		return postingRepository.save(existing);
 	}

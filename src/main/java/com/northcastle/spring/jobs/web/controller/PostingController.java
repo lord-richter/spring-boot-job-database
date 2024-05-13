@@ -51,16 +51,16 @@ public class PostingController {
 	}
 
 	@GetMapping
-	public String getPostings(Model model){
+	public String getAllPostings(Model model){
 		model.addAttribute("postings", this.postingRepository.findAll());
 		model.addAttribute("module", "postings");
-		log.info("getPostings");
+		log.info("Controller.getPostings()");
 		model.asMap().forEach((k,v) -> {log.info(k+" = "+v);});
 		return "postings";
 	}
 
 	@GetMapping(path = "/view/{id}")
-	public String getPosting(@PathVariable("id") UUID postingId, Model model) {
+	public String getSinglePosting(@PathVariable("id") UUID postingId, Model model) {
 		Posting posting = postingService.getPosting(postingId);
 		model.addAttribute("posting", posting);
 		model.addAttribute("statuslist",new ArrayList<String>(STATUSLIST));
@@ -69,9 +69,8 @@ public class PostingController {
 	}
 
 	@GetMapping("/new")
-	public String newPosting(PostingForm postingForm, Model model) {
-		log.info("newPosting");
-		log.info(postingForm.toString());
+	public String startNewPosting(PostingForm postingForm, Model model) {
+		log.info("Controller.startNewPosting(): "+postingForm);
 		model.addAttribute("posting", postingForm);
 		return "newposting";
 	}
@@ -79,13 +78,13 @@ public class PostingController {
 	@PostMapping("/new")
 	@ResponseStatus(HttpStatus.CREATED)
 	public String submitNewPosting(@Valid @RequestBody PostingForm posting, BindingResult bindingResult, Model model) {
-		log.info("submitNewPostingController: "+posting);
+		log.info("Controller.submitNewPosting(): "+posting);
 		// circle back on form errors
 		if (bindingResult.hasErrors()) {
 			model.addAttribute("posting",posting);
 			model.addAttribute("statuslist",new ArrayList<String>(STATUSLIST));
 			model.addAttribute("module", "postings");
-			log.warn("submitNewPostingController: Has errors = "+bindingResult);
+			log.warn("Controller.submitNewPosting(): Has errors = "+bindingResult);
 			return "newposting";
 		}
 		
@@ -95,47 +94,46 @@ public class PostingController {
 	}
 	
 	@GetMapping("/edit/{id}")
-	public String editPosting(@PathVariable("id") UUID postingId, Model model) {
+	public String startEditPosting(@PathVariable("id") UUID postingId, Model model) {
 		Optional<Posting> posting_reference = this.postingRepository.findById(postingId);
 		if (posting_reference.isEmpty()) {
+			log.info("Controller.startEditPosting(): Posting not found");
 			throw new ResponseStatusException(
-					HttpStatus.NOT_FOUND, "entity not found"
+					HttpStatus.NOT_FOUND, "Posting not found"
 					);
 		}
 		
 		Posting posting = posting_reference.get();
 		Posting editposting = new Posting();
-		log.info("editPostingController(): "+posting);
+		log.info("Controller.startEditPosting(): "+posting);
 		BeanUtils.copyProperties(posting, editposting);
-		log.info("editPostingController(): "+editposting);
+		log.info("Controller.startEditPosting(): "+editposting);
 		
 		model.addAttribute("posting",editposting);
 		model.addAttribute("statuslist",new ArrayList<String>(STATUSLIST));
 		model.addAttribute("module", "postings");
-		model.asMap().forEach((k,v)->{log.info("editPostingController(): "+k+" = "+v);});
+		model.asMap().forEach((k,v)->{log.info("Controller.startEditPosting(): "+k+" = "+v);});
 		return "editposting";
 	}
 
 	@PutMapping("/edit/{id}")
-	public String updatePosting(@PathVariable("id") UUID postingId, @Valid @RequestBody Posting posting, BindingResult bindingResult, Model model) {
-		log.info("updatePostingController() :"+postingId);
-		log.info("updatePostingController() :"+posting);
-		log.info("updatePostingController() :"+bindingResult);
-		
-		
+	public String submitEditPosting(@PathVariable("id") UUID postingId, @Valid @RequestBody Posting posting, BindingResult bindingResult, Model model) {
+		log.info("Controller.submitEditPosting() :"+postingId);
+		log.info("Controller.submitEditPosting() :"+posting);
+		log.info("Controller.submitEditPosting() :"+bindingResult);
 		
 		// circle back on errors
 		if (bindingResult.hasErrors()) {
 			model.addAttribute("posting",posting);
 			model.addAttribute("statuslist",new ArrayList<String>(STATUSLIST));
 			model.addAttribute("module", "postings");	
-			log.warn("updatePostingController: Has errors = "+bindingResult);
+			log.warn("Controller.submitEditPosting(): Has errors = "+bindingResult);
 			return "editposting";
 		}
 		
 		model.addAttribute("message",updatePostingMessage);
 		model.addAttribute("posting",postingService.updatePosting(posting));
-		model.asMap().forEach((k,v)->{log.info("updatePostingController() : "+k+" = "+v);});
+		model.asMap().forEach((k,v)->{log.info("Controller.submitEditPosting() : "+k+" = "+v);});
 		return "newpostingsuccess";
 	}
 	

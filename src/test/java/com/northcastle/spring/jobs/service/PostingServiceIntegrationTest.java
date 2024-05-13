@@ -39,23 +39,36 @@ public class PostingServiceIntegrationTest {
 	@Test
 	void getAllPostings(){
 		int count = 5;  // depends on data.sql
-		log.info("getAllPostingsTest(): Count = "+postingRepository.count());
+		log.info("TEST.getAllPostings(): Count = "+postingRepository.count());
 		List<Posting> postings = postingRepository.findAll();
-		postings.forEach((v)->{log.info("getAllPostingsTest(): "+v);});
+		postings.forEach((v)->{log.info("TEST.getAllPostings(): "+v);});
 		assertEquals(count, postings.size());
 	}
 
 	@Test
-	void getPosting(){
+	void getPostingUUID(){
 		Posting posting = this.postingService.getPosting(Convert.stringToUUID("ecf1bde1-3849-4b38-94e6-f8a43a89f816"));
-		log.info("getPostingTest(): "+posting);
+		log.info("TEST.getPostingUUID(): "+posting);
 		assertNotNull(posting);
 		assertEquals("Fisherman", posting.getPostingName());
 	}
+	
+	@Test
+	void getPostingString(){
+		Posting posting = this.postingService.getPosting("ecf1bde1-3849-4b38-94e6-f8a43a89f816");
+		log.info("TEST.getPostingString(): "+posting);
+		assertNotNull(posting);
+		assertEquals("Fisherman", posting.getPostingName());
+	}	
 
 	@Test
-	void getPosting_NotFound(){
+	void getPostingUUID_NotFound(){
 		assertThrows(NotFoundException.class, () -> this.postingService.getPosting(Convert.stringToUUID("613de372-c0f0-4d12-bb94-27d3320c7000")), "should have thrown an exception");
+	}
+	
+	@Test
+	void getPostingString_NotFound(){
+		assertThrows(NotFoundException.class, () -> this.postingService.getPosting("613de372-c0f0-4d12-bb94-27d3320c7000"), "should have thrown an exception");
 	}
 
 	@Test
@@ -93,7 +106,7 @@ public class PostingServiceIntegrationTest {
 		assertEquals(fauxData.get("companyAddress"), posting.getCompanyAddress());
 		assertEquals(Posting.PENDING, posting.getAppStatus());
 		
-		log.info("addPostingTest(): "+posting);
+		log.info("TEST.addPosting(): "+posting);
 		
 		//cleaning up
 		this.postingService.deletePosting(posting.getId());
