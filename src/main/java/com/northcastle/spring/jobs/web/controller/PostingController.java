@@ -55,7 +55,7 @@ public class PostingController {
 		model.addAttribute("postings", this.postingRepository.findAll());
 		model.addAttribute("module", "postings");
 		log.info("Controller.getPostings()");
-		model.asMap().forEach((k,v) -> {log.info(k+" = "+v);});
+		model.asMap().forEach((k,v) -> {log.debug(k+" = "+v);});
 		return "postings";
 	}
 

@@ -44,6 +44,7 @@ public class Posting {
 		this.postingUrl = posting.getPostingUrl();
 		this.postingPriority = posting.getPostingPriority();
 		this.postingDate = posting.getPostingDate();
+		this.postingFolder = posting.getPostingFolder();
 		this.companyName = posting.getCompanyName();
 		this.companyAddress = posting.getCompanyAddress();
 		this.comment = posting.getComment();
@@ -78,6 +79,10 @@ public class Posting {
 
 	@Column(name="posting_date")
 	private Date postingDate;
+
+	@Column(name="posting_folder")
+	@Size(max=64)	
+	private String postingFolder;
 
 	@Column(name="company_name")
 	@NotNull(message = "Company name cannot be empty")

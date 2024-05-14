@@ -114,6 +114,7 @@ public class PostingService {
 		existing.setCompanyAddress(update.getCompanyAddress());
 		existing.setComment(update.getComment());
 		existing.setPostingPriority(update.getPostingPriority());
+		existing.setPostingFolder(update.getPostingFolder());
 		existing.setPostingRef(update.getPostingRef());
 		existing.setPostingUrl(update.getPostingUrl());
 		
@@ -126,6 +127,12 @@ public class PostingService {
 			// status is always updated when changed
 			existing.setAppStatus(update.getAppStatus());
 		}
+
+		// sanity check: clear app date if it gets set to pending
+		if (existing.getAppStatus().equals(Posting.PENDING)) {
+			existing.setAppDate(null);
+		}
+		
 		// status url is always updated to latest
 		existing.setAppStatusUrl(update.getAppStatusUrl());
 

@@ -19,6 +19,7 @@ public class PostingModel {
 	private Long   postingPriority;
 	private String postingUrl;
 	private Date   postingDate;
+	private String postingFolder;
 	private String companyName;
 	private String companyAddress;
 	private String comment;

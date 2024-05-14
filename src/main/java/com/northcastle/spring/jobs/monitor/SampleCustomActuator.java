@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Endpoint(id = "custom")
-public class SampleActuator {
+public class SampleCustomActuator {
 
 	// .../custom?text=SomeText
     @ReadOperation

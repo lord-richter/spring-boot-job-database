@@ -7,17 +7,18 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.sql.Date;
 import java.util.List;
-import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.ClassMode;
 
+import com.northcastle.spring.jobs.CommonTest;
 import com.northcastle.spring.jobs.data.entity.Posting;
 import com.northcastle.spring.jobs.data.repository.PostingRepository;
-import com.northcastle.spring.jobs.util.Convert;
 import com.northcastle.spring.jobs.web.exception.NotFoundException;
 import com.northcastle.spring.jobs.web.forms.PostingForm;
 
@@ -26,6 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @SpringBootTest
 @AutoConfigureTestDatabase(replace = Replace.ANY)
+@DirtiesContext(classMode = ClassMode.AFTER_EACH_TEST_METHOD)
 @Slf4j
 public class PostingServiceIntegrationTest {
 
@@ -46,7 +48,7 @@ public class PostingServiceIntegrationTest {
 
 	@Test
 	void getPostingUUID(){
-		Posting posting = this.postingService.getPosting(Convert.stringToUUID("ecf1bde1-3849-4b38-94e6-f8a43a89f816"));
+		Posting posting = this.postingService.getPosting(CommonTest.VALID_UUID_1);
 		log.info("TEST.getPostingUUID(): "+posting);
 		assertNotNull(posting);
 		assertEquals("Fisherman", posting.getPostingName());
@@ -54,7 +56,7 @@ public class PostingServiceIntegrationTest {
 	
 	@Test
 	void getPostingString(){
-		Posting posting = this.postingService.getPosting("ecf1bde1-3849-4b38-94e6-f8a43a89f816");
+		Posting posting = this.postingService.getPosting(CommonTest.VALID_UUID_STRING_1);
 		log.info("TEST.getPostingString(): "+posting);
 		assertNotNull(posting);
 		assertEquals("Fisherman", posting.getPostingName());
@@ -62,34 +64,26 @@ public class PostingServiceIntegrationTest {
 
 	@Test
 	void getPostingUUID_NotFound(){
-		assertThrows(NotFoundException.class, () -> this.postingService.getPosting(Convert.stringToUUID("613de372-c0f0-4d12-bb94-27d3320c7000")), "should have thrown an exception");
+		assertThrows(NotFoundException.class, () -> this.postingService.getPosting(CommonTest.UNKNOWN_UUID), "should have thrown an exception");
 	}
 	
 	@Test
 	void getPostingString_NotFound(){
-		assertThrows(NotFoundException.class, () -> this.postingService.getPosting("613de372-c0f0-4d12-bb94-27d3320c7000"), "should have thrown an exception");
+		assertThrows(NotFoundException.class, () -> this.postingService.getPosting(CommonTest.UNKNOWN_UUID_STRING), "should have thrown an exception");
 	}
 
 	@Test
 	void addPosting(){
-		Map<String,String> fauxData = Map.of(
-				"postingName","Fish Truck Driver",
-				"postingRef","DR001",
-				"postingUrl","https://surfcity.com",
-				"companyName","No Lobsters Allowed",
-				"companyAddress","Surf City, NC",
-				"comment","This is a comment"
-				);
-				
-		
 		// faux results from web form
-		PostingForm postingForm = new PostingForm(fauxData.get("postingName"),
-				fauxData.get("postingRef"),
-				fauxData.get("postingUrl"),
+		PostingForm postingForm = new PostingForm(
+				CommonTest.FAUX_POSTINGFORM_DATA.get("postingName"),
+				CommonTest.FAUX_POSTINGFORM_DATA.get("postingRef"),
+				CommonTest.FAUX_POSTINGFORM_DATA.get("postingUrl"),
 				1L,
-				fauxData.get("companyName"),
-				fauxData.get("companyAddress"),
-				fauxData.get("comment")
+				CommonTest.FAUX_POSTINGFORM_DATA.get("postingFolder"),
+				CommonTest.FAUX_POSTINGFORM_DATA.get("companyName"),
+				CommonTest.FAUX_POSTINGFORM_DATA.get("companyAddress"),
+				CommonTest.FAUX_POSTINGFORM_DATA.get("comment")
 				);
 		
 		Posting posting = this.postingService.addPosting(postingForm);
@@ -100,12 +94,13 @@ public class PostingServiceIntegrationTest {
 		assertNotNull(posting.getPostingDate());
 		assertNull(posting.getAppDate());
 		assertNull(posting.getAppStatusUrl());
-		assertEquals(fauxData.get("postingRef"), posting.getPostingRef());
-		assertEquals(fauxData.get("postingName"), posting.getPostingName());
-		assertEquals(fauxData.get("postingUrl"), posting.getPostingUrl());
-		assertEquals(fauxData.get("companyName"), posting.getCompanyName());
-		assertEquals(fauxData.get("companyAddress"), posting.getCompanyAddress());
-		assertEquals(fauxData.get("comment"), posting.getComment());
+		assertEquals(CommonTest.FAUX_POSTINGFORM_DATA.get("postingRef"), posting.getPostingRef());
+		assertEquals(CommonTest.FAUX_POSTINGFORM_DATA.get("postingName"), posting.getPostingName());
+		assertEquals(CommonTest.FAUX_POSTINGFORM_DATA.get("postingUrl"), posting.getPostingUrl());
+		assertEquals(CommonTest.FAUX_POSTINGFORM_DATA.get("postingFolder"), posting.getPostingFolder());
+		assertEquals(CommonTest.FAUX_POSTINGFORM_DATA.get("companyName"), posting.getCompanyName());
+		assertEquals(CommonTest.FAUX_POSTINGFORM_DATA.get("companyAddress"), posting.getCompanyAddress());
+		assertEquals(CommonTest.FAUX_POSTINGFORM_DATA.get("comment"), posting.getComment());
 		assertEquals(Posting.PENDING, posting.getAppStatus());
 		
 		log.info("TEST.addPosting(): "+posting);
@@ -117,17 +112,18 @@ public class PostingServiceIntegrationTest {
 	@Test 
 	void updatePosting_PendingToApplied(){
 		// id matches existing record from data.sql
-		Posting existing = postingService.getPosting(Convert.stringToUUID("a3450c68-fd19-4a7d-b4f3-72119a4bf47d"));
+		Posting existing = postingService.getPosting(CommonTest.VALID_UUID_2);
 		// make changes
-		existing.setPostingName("Mechanic II");
-		existing.setCompanyName("The Lobster Tank");
-		existing.setCompanyAddress("Southport, NC");
-		existing.setComment("This is the next comment");
-		existing.setPostingRef("P0023A");
+		existing.setPostingName(CommonTest.FAUX_POSTING_DATA.get("postingName"));
+		existing.setCompanyName(CommonTest.FAUX_POSTING_DATA.get("companyName"));
+		existing.setCompanyAddress(CommonTest.FAUX_POSTING_DATA.get("companyAddress"));
+		existing.setComment(CommonTest.FAUX_POSTING_DATA.get("comment"));
+		existing.setPostingFolder(CommonTest.FAUX_POSTING_DATA.get("postingFolder"));
+		existing.setPostingRef(CommonTest.FAUX_POSTING_DATA.get("postingRef"));
 		existing.setPostingPriority(2L);
-		existing.setPostingUrl("http://www.openai.com");
-		existing.setPostingDate(Date.valueOf("2024-05-01"));
-		existing.setAppStatusUrl("http://www.openai.com/status");
+		existing.setPostingUrl(CommonTest.FAUX_POSTING_DATA.get("postingUrl"));
+		existing.setPostingDate(Date.valueOf(CommonTest.FAUX_POSTING_DATA.get("postingDate")));
+		existing.setAppStatusUrl(CommonTest.FAUX_POSTING_DATA.get("appStatusUrl"));
 		existing.setAppStatus(Posting.APPLIED);
 		
 		// update
@@ -144,6 +140,7 @@ public class PostingServiceIntegrationTest {
 		assertEquals(existing.getPostingRef(), posting.getPostingRef());
 		assertEquals(existing.getPostingName(), posting.getPostingName());
 		assertEquals(existing.getPostingUrl(), posting.getPostingUrl());
+		assertEquals(existing.getPostingFolder(), posting.getPostingFolder());
 		assertEquals(existing.getCompanyName(), posting.getCompanyName());
 		assertEquals(existing.getCompanyAddress(), posting.getCompanyAddress());
 		assertEquals(existing.getComment(), posting.getComment());
@@ -156,7 +153,7 @@ public class PostingServiceIntegrationTest {
 	@Test
 	void updatePosting_AppliedToRejected(){
 		// id matches existing record from data.sql
-		Posting existing = postingService.getPosting(Convert.stringToUUID("ecf1bde1-3849-4b38-94e6-f8a43a89f816"));
+		Posting existing = postingService.getPosting(CommonTest.VALID_APPLIED_1);
 		// make changes
 		existing.setAppStatus(Posting.REJECTED);
 		
@@ -174,6 +171,7 @@ public class PostingServiceIntegrationTest {
 		assertEquals(existing.getPostingRef(), posting.getPostingRef());
 		assertEquals(existing.getPostingName(), posting.getPostingName());
 		assertEquals(existing.getPostingUrl(), posting.getPostingUrl());
+		assertEquals(existing.getPostingFolder(), posting.getPostingFolder());
 		assertEquals(existing.getCompanyName(), posting.getCompanyName());
 		assertEquals(existing.getCompanyAddress(), posting.getCompanyAddress());
 		assertEquals(existing.getComment(), posting.getComment());
@@ -185,7 +183,7 @@ public class PostingServiceIntegrationTest {
 	@Test
 	void updatePosting_PendingToPending(){
 		// id matches existing record from data.sql
-		Posting existing = postingService.getPosting(Convert.stringToUUID("613de372-c0f0-4d12-bb94-27d3320c59ec"));
+		Posting existing = postingService.getPosting(CommonTest.VALID_PENDING_1);
 		// make changes
 		existing.setPostingName("Apprentice Fish Cleaner (Remote)");
 		
@@ -204,6 +202,7 @@ public class PostingServiceIntegrationTest {
 		assertEquals(existing.getPostingRef(), posting.getPostingRef());
 		assertEquals(existing.getPostingName(), posting.getPostingName());
 		assertEquals(existing.getPostingUrl(), posting.getPostingUrl());
+		assertEquals(existing.getPostingFolder(), posting.getPostingFolder());
 		assertEquals(existing.getCompanyName(), posting.getCompanyName());
 		assertEquals(existing.getCompanyAddress(), posting.getCompanyAddress());
 		assertEquals(existing.getComment(), posting.getComment());
@@ -214,9 +213,9 @@ public class PostingServiceIntegrationTest {
 	@Test
 	void updatePosting_NotFound(){
 		// id matches existing record from data.sql
-		Posting existing = postingService.getPosting(Convert.stringToUUID("613de372-c0f0-4d12-bb94-27d3320c59ec"));
+		Posting existing = postingService.getPosting(CommonTest.VALID_UUID_1);
 		// new ID to force mismatch
-		existing.setId(Convert.stringToUUID("613de372-c0f0-4d12-bb94-27d3320c5700"));
+		existing.setId(CommonTest.UNKNOWN_UUID);
 		
 		// update
 		assertThrows(NotFoundException.class, () -> this.postingService.updatePosting(existing));

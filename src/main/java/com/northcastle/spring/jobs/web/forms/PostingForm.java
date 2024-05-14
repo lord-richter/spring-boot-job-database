@@ -33,6 +33,9 @@ public class PostingForm {
 	@Max(10)
 	private Long postingPriority=1L;
 
+	@Size(max=64)
+	private String postingFolder;
+	
 	@NotNull
 	@EqualsAndHashCode.Include
 	private Date postingDate = java.sql.Date.valueOf(LocalDate.ofInstant(new java.util.Date().toInstant(), ZoneId.systemDefault()));
@@ -56,6 +59,7 @@ public class PostingForm {
 	 * @param postingRef
 	 * @param postingUrl
 	 * @param postingPriority
+	 * @param postingFolder
 	 * @param companyName
 	 * @param companyAddress
 	 * @param comment
@@ -64,6 +68,7 @@ public class PostingForm {
 			@Size(max = 20) String postingRef,
 			@NotNull(message = "Posting URL cannot be empty") @Size(max = 256) String postingUrl,
 			@Min(1) @Max(10) Long postingPriority,
+			@Size(max = 64) String postingFolder,
 			@NotNull(message = "Company name cannot be empty") @Size(min = 2, max = 64) String companyName,
 			@NotNull(message = "Company location cannot be empty") @Size(min = 2, max = 64) String companyAddress,
 			@Size(min = 0, max = 512) String comment) {
@@ -72,9 +77,10 @@ public class PostingForm {
 		this.postingRef = postingRef;
 		this.postingUrl = postingUrl;
 		this.postingPriority = postingPriority;
+		this.postingFolder = postingFolder;
 		this.companyName = companyName;
-		this.comment = comment;
 		this.companyAddress = companyAddress;
+		this.comment = comment;
 	}
 
 	
