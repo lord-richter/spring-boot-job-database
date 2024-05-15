@@ -225,7 +225,8 @@ public class PostingTest {
 				CommonTest.FAUX_POSTING_DATA.get("comment"),
 				Date.valueOf(CommonTest.FAUX_POSTING_DATA.get("appDate")),
 				CommonTest.FAUX_POSTING_DATA.get("appStatus"),
-				CommonTest.FAUX_POSTING_DATA.get("appStatusUrl"));
+				CommonTest.FAUX_POSTING_DATA.get("appStatusUrl"),
+				null);
 
 		assertNotNull(posting);
 		

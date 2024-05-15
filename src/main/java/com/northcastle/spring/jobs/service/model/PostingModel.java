@@ -26,4 +26,5 @@ public class PostingModel {
 	private Date   appDate;
 	private String appStatus;
 	private String appStatusUrl;
+	private Date   updated;
 }

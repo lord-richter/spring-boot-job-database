@@ -66,6 +66,7 @@ public class PostingService {
 
 		// set the UUID for the new posting
 		posting.setId(UUID.randomUUID());
+		posting.setUpdated(Date.valueOf(LocalDate.ofInstant(new java.util.Date().toInstant(), ZoneId.systemDefault())));
 		
 		// verify that UUID is not currently used
 		// if it is, just get a new one.  Limit this to 10 tries.
@@ -120,24 +121,32 @@ public class PostingService {
 		
 		// if status changed, special handling
 		if (!existing.getAppStatus().equals(update.getAppStatus())) {
+			log.info("Service.updatePosting(): Application status changed from "+existing.getAppStatus()+" to "+update.getAppStatus());
 			// if previously Pending, set the application date to now
 			if (existing.getAppStatus().equals(Posting.PENDING)) {
 				existing.setAppDate(Date.valueOf(LocalDate.ofInstant(new java.util.Date().toInstant(), ZoneId.systemDefault())));
+				log.info("Service.updatePosting(): Application date is now: "+existing.getAppDate());
 			}
 			// status is always updated when changed
 			existing.setAppStatus(update.getAppStatus());
+			log.info("Service.updatePosting(): Application status is now: "+existing.getAppStatus());
+		} else {
+			// application date does not change
+			existing.setAppDate(update.getAppDate());
+			log.info("Service.updatePosting(): Application date is : "+existing.getAppDate());
 		}
 
 		// sanity check: clear app date if it gets set to pending
 		// otherwise, make sure that the app date gets transferred over
 		if (existing.getAppStatus().equals(Posting.PENDING)) {
 			existing.setAppDate(null);
-		} else {
-			existing.setAppDate(update.getAppDate());
+			log.info("Service.updatePosting(): Application date is: NULL");
 		}
 		
 		// status url is always updated to latest
 		existing.setAppStatusUrl(update.getAppStatusUrl());
+		
+		existing.setUpdated(Date.valueOf(LocalDate.ofInstant(new java.util.Date().toInstant(), ZoneId.systemDefault())));
 
 		log.info("Service.updatePosting(): "+existing);
 

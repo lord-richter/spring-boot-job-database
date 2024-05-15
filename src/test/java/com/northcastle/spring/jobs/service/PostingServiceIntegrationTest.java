@@ -135,6 +135,7 @@ public class PostingServiceIntegrationTest {
 		assertNotNull(posting.getPostingDate());
 		assertNotNull(posting.getAppDate());
 		assertNotNull(posting.getAppStatusUrl());
+		assertNotNull(posting.getUpdated());
 		assertEquals(existing.getId(), posting.getId());
 		assertEquals(existing.getPostingDate(), posting.getPostingDate());
 		assertEquals(existing.getPostingRef(), posting.getPostingRef());
@@ -166,6 +167,7 @@ public class PostingServiceIntegrationTest {
 		assertNotNull(posting.getPostingDate());
 		assertNotNull(posting.getAppDate());
 		assertNotNull(posting.getAppStatusUrl());
+		assertNotNull(posting.getUpdated());
 		assertEquals(existing.getId(), posting.getId());
 		assertEquals(existing.getPostingDate(), posting.getPostingDate());
 		assertEquals(existing.getPostingRef(), posting.getPostingRef());
@@ -197,6 +199,7 @@ public class PostingServiceIntegrationTest {
 		assertNotNull(posting.getPostingDate());
 		assertNull(posting.getAppDate());
 		assertNull(posting.getAppStatusUrl());
+		assertNotNull(posting.getUpdated());
 		assertEquals(existing.getId(), posting.getId());
 		assertEquals(existing.getPostingDate(), posting.getPostingDate());
 		assertEquals(existing.getPostingRef(), posting.getPostingRef());

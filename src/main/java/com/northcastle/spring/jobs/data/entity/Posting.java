@@ -52,6 +52,7 @@ public class Posting {
 		this.appStatus = PENDING;
 		this.appStatusUrl = null;
 	}
+	
 
 	@Id
 	@Column(name="posting_id")
@@ -109,5 +110,6 @@ public class Posting {
 	@Size(max=256)	
 	private String appStatusUrl;
 
-
+	@Column(name="updated",nullable = true)
+	private Date updated;
 }
