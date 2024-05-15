@@ -1,5 +1,6 @@
 package com.northcastle.spring.jobs.service.model;
 
+import java.sql.Date;
 import java.util.UUID;
 
 import lombok.Getter;
@@ -15,12 +16,15 @@ public class PostingModel {
 	private UUID id;
 	private String postingName;
 	private String postingRef;
-	private Long postingPriority;
+	private Long   postingPriority;
 	private String postingUrl;
-	private String postingDate;
+	private Date   postingDate;
+	private String postingFolder;
 	private String companyName;
 	private String companyAddress;
-	private String appDate;
+	private String comment;
+	private Date   appDate;
 	private String appStatus;
 	private String appStatusUrl;
+	private Date   updated;
 }

@@ -7,6 +7,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -15,8 +16,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.server.ResponseStatusException;
@@ -34,7 +33,10 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/postings")
 public class PostingController {
 
+	@Autowired
 	private final PostingRepository postingRepository;
+	
+	@Autowired
 	private final PostingService postingService;
 
 	public static List<String> STATUSLIST = Arrays.asList(Posting.PENDING,Posting.APPLIED,Posting.INTERVIEW,Posting.REJECTED,Posting.CLOSED);
@@ -52,9 +54,9 @@ public class PostingController {
 
 	@GetMapping
 	public String getAllPostings(Model model){
-		model.addAttribute("postings", this.postingRepository.findAll());
+		model.addAttribute("postings", this.postingRepository.findAllByOrderByPostingDateDesc());
 		model.addAttribute("module", "postings");
-		log.info("Controller.getPostings()");
+		log.info("Controller.getAllPostings()");
 		model.asMap().forEach((k,v) -> {log.info(k+" = "+v);});
 		return "postings";
 	}
@@ -68,16 +70,17 @@ public class PostingController {
 		return "posting";
 	}
 
-	@GetMapping("/new")
-	public String startNewPosting(PostingForm postingForm, Model model) {
+	@GetMapping(value="/new")
+	public String startNewPosting(Model model) {
+		PostingForm postingForm = new PostingForm();
 		log.info("Controller.startNewPosting(): "+postingForm);
-		model.addAttribute("posting", postingForm);
+		model.addAttribute("postingForm", postingForm);
 		return "newposting";
 	}
 
-	@PostMapping("/new")
+	@PostMapping(value="/new")
 	@ResponseStatus(HttpStatus.CREATED)
-	public String submitNewPosting(@Valid @RequestBody PostingForm posting, BindingResult bindingResult, Model model) {
+	public String submitNewPosting(@Valid PostingForm posting, BindingResult bindingResult, Model model) {
 		log.info("Controller.submitNewPosting(): "+posting);
 		// circle back on form errors
 		if (bindingResult.hasErrors()) {
@@ -116,8 +119,8 @@ public class PostingController {
 		return "editposting";
 	}
 
-	@PutMapping("/edit/{id}")
-	public String submitEditPosting(@PathVariable("id") UUID postingId, @Valid @RequestBody Posting posting, BindingResult bindingResult, Model model) {
+	@PostMapping("/edit/{id}")
+	public String submitEditPosting(@PathVariable("id") UUID postingId, @Valid Posting posting, BindingResult bindingResult, Model model) {
 		log.info("Controller.submitEditPosting() :"+postingId);
 		log.info("Controller.submitEditPosting() :"+posting);
 		log.info("Controller.submitEditPosting() :"+bindingResult);
@@ -133,8 +136,10 @@ public class PostingController {
 		
 		model.addAttribute("message",updatePostingMessage);
 		model.addAttribute("posting",postingService.updatePosting(posting));
+		model.addAttribute("statuslist",new ArrayList<String>(STATUSLIST));
+		model.addAttribute("module", "postings");	
 		model.asMap().forEach((k,v)->{log.info("Controller.submitEditPosting() : "+k+" = "+v);});
-		return "newpostingsuccess";
+		return "editposting";
 	}
 	
 }

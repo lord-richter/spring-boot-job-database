@@ -15,15 +15,18 @@
         	<h3 class="card-title" th:text="${posting.postingName}">Position</h3>
             <h5 class="card-subtitle" th:text="|${posting.companyName} - ${posting.companyAddress}|">Company Name - Address</h5>
             <br/><p class="card-text">
-            Posting: <a target="_blank" th:href="${posting.postingUrl}" th:text="${posting.postingUrl}">Link</a><br/>
+            Posting: <a target="_blank" th:href="${posting.postingUrl}" th:text="${posting.postingUrl}"></a><br/>
             Reference: <span th:text="${posting.postingRef}">(ref)</span><br/>
+            Document Folder: <span th:text="${posting.postingFolder}">(folder)</span><br/>
+            Comment: <span th:text="${posting.comment}">(comment)</span><br/>
             Status: <span th:text="${posting.appStatus}">(status)</span><br/>
-            <span th:text="${posting.appDate} ? 'Application date: ' + ${posting.appDate}">(date)</span>
+            <span th:if="${posting.appDate}" th:text="'Application date: ' + ${posting.appDate}"></span><br/>
+            <span th:if="${posting.appStatusUrl}">Status URL: <a target="_blank" th:if="${posting.appStatusUrl}" th:href="${posting.appStatusUrl}" th:text="${posting.appStatusUrl}"></a></span></br>
             </p>
         </div>
     </div>
     <a class="btn btn-primary" href="/postings">Return to Postings</a>
-    <a class="btn btn-secondary" href="/postings" th:href="'/postings/edit/'+${posting.id}">Update</a>
+    <a class="btn btn-primary" href="/postings" th:href="'/postings/edit/'+${posting.id}">Edit</a>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>

@@ -6,15 +6,15 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.AbstractMap;
-import java.util.Map;
-import java.util.UUID;
+import java.sql.Date;
+import java.text.ParseException;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import com.northcastle.spring.jobs.CommonTest;
 import com.northcastle.spring.jobs.data.entity.Posting;
 import com.northcastle.spring.jobs.service.model.PostingModel;
 import com.northcastle.spring.jobs.web.forms.PostingForm;
@@ -23,21 +23,6 @@ import com.northcastle.spring.jobs.web.forms.PostingForm;
 @AutoConfigureTestDatabase(replace = Replace.ANY)
 public class PostingTest {
 	
-	static String fauxString = "FAUX";
-	static UUID fauxUUID = UUID.randomUUID();
-	static Long fauxLong = 685492945L;
-	static Map<String,String> fauxData = Map.ofEntries(
-			new AbstractMap.SimpleEntry<String, String>("postingName","Fish Truck Driver"),
-			new AbstractMap.SimpleEntry<String, String>("postingRef","DR001"),
-			new AbstractMap.SimpleEntry<String, String>("postingUrl","https://surfcity.com"),
-			new AbstractMap.SimpleEntry<String, String>("postingDate","yyyy-mm-dd"),
-			new AbstractMap.SimpleEntry<String, String>("companyName","No Lobsters Allowed"),
-			new AbstractMap.SimpleEntry<String, String>("companyAddress","Surf City, NC"),
-			new AbstractMap.SimpleEntry<String, String>("appDate","yyyy-mm-dd"),
-			new AbstractMap.SimpleEntry<String, String>("appStatus",Posting.APPLIED),
-			new AbstractMap.SimpleEntry<String, String>("appStatusUrl","http://")
-			);
-
 	@Test
 	public void postingConstructorDefault() {
 	
@@ -46,47 +31,55 @@ public class PostingTest {
 		assertNotNull(posting);
 		
 		assertNull(posting.getId());
-		posting.setId(fauxUUID);
-		assertEquals(fauxUUID, posting.getId());
+		posting.setId(CommonTest.FAUX_UUID);
+		assertEquals(CommonTest.FAUX_UUID, posting.getId());
 		
 		assertNull(posting.getPostingDate());
-		posting.setPostingDate(fauxString);
-		assertEquals(fauxString, posting.getPostingDate());
+		posting.setPostingDate(CommonTest.FAUX_DATE);
+		assertEquals(CommonTest.FAUX_DATE, posting.getPostingDate());
 		
 		
 		assertNull(posting.getAppDate());
-		posting.setAppDate(fauxString);
-		assertEquals(fauxString, posting.getAppDate());
+		posting.setAppDate(CommonTest.FAUX_DATE);
+		assertEquals(CommonTest.FAUX_DATE, posting.getAppDate());
 		
 		
 		assertNull(posting.getAppStatusUrl());
-		posting.setAppStatusUrl(fauxString);
-		assertEquals(fauxString, posting.getAppStatusUrl());
+		posting.setAppStatusUrl(CommonTest.FAUX_STRING);
+		assertEquals(CommonTest.FAUX_STRING, posting.getAppStatusUrl());
 		
 		
 		assertNull(posting.getPostingRef());
-		posting.setPostingRef(fauxString);
-		assertEquals(fauxString, posting.getPostingRef());
+		posting.setPostingRef(CommonTest.FAUX_STRING);
+		assertEquals(CommonTest.FAUX_STRING, posting.getPostingRef());
 		
 		assertNull(posting.getPostingPriority());
-		posting.setPostingPriority(fauxLong);
-		assertEquals(fauxLong, posting.getPostingPriority());
+		posting.setPostingPriority(CommonTest.FAUX_LONG);
+		assertEquals(CommonTest.FAUX_LONG, posting.getPostingPriority());
 				
 		assertNull(posting.getPostingName());
-		posting.setPostingName(fauxString);
-		assertEquals(fauxString, posting.getPostingName());
+		posting.setPostingName(CommonTest.FAUX_STRING);
+		assertEquals(CommonTest.FAUX_STRING, posting.getPostingName());
 		
 		assertNull(posting.getPostingUrl());
-		posting.setPostingUrl(fauxString);
-		assertEquals(fauxString, posting.getPostingUrl());
+		posting.setPostingUrl(CommonTest.FAUX_STRING);
+		assertEquals(CommonTest.FAUX_STRING, posting.getPostingUrl());
+
+		assertNull(posting.getPostingFolder());
+		posting.setPostingFolder(CommonTest.FAUX_STRING);
+		assertEquals(CommonTest.FAUX_STRING, posting.getPostingFolder());
 
 		assertNull(posting.getCompanyName());
-		posting.setCompanyName(fauxString);
-		assertEquals(fauxString, posting.getCompanyName());
-		
+		posting.setCompanyName(CommonTest.FAUX_STRING);
+		assertEquals(CommonTest.FAUX_STRING, posting.getCompanyName());
+
 		assertNull(posting.getCompanyAddress());
-		posting.setCompanyAddress(fauxString);
-		assertEquals(fauxString, posting.getCompanyAddress());
+		posting.setCompanyAddress(CommonTest.FAUX_STRING);
+		assertEquals(CommonTest.FAUX_STRING, posting.getCompanyAddress());
+		
+		assertNull(posting.getComment());
+		posting.setComment(CommonTest.FAUX_STRING);
+		assertEquals(CommonTest.FAUX_STRING, posting.getComment());		
 		
 		assertEquals(Posting.PENDING, posting.getAppStatus());
 		posting.setAppStatus(Posting.APPLIED);
@@ -106,47 +99,55 @@ public class PostingTest {
 		assertNotNull(posting);
 		
 		assertNull(posting.getId());
-		posting.setId(fauxUUID);
-		assertEquals(fauxUUID, posting.getId());
+		posting.setId(CommonTest.FAUX_UUID);
+		assertEquals(CommonTest.FAUX_UUID, posting.getId());
 		
 		assertNull(posting.getPostingDate());
-		posting.setPostingDate(fauxString);
-		assertEquals(fauxString, posting.getPostingDate());
+		posting.setPostingDate(CommonTest.FAUX_DATE);
+		assertEquals(CommonTest.FAUX_DATE, posting.getPostingDate());
 		
 		
 		assertNull(posting.getAppDate());
-		posting.setAppDate(fauxString);
-		assertEquals(fauxString, posting.getAppDate());
+		posting.setAppDate(CommonTest.FAUX_DATE);
+		assertEquals(CommonTest.FAUX_DATE, posting.getAppDate());
 		
 		
 		assertNull(posting.getAppStatusUrl());
-		posting.setAppStatusUrl(fauxString);
-		assertEquals(fauxString, posting.getAppStatusUrl());
+		posting.setAppStatusUrl(CommonTest.FAUX_STRING);
+		assertEquals(CommonTest.FAUX_STRING, posting.getAppStatusUrl());
 		
 		
 		assertNull(posting.getPostingRef());
-		posting.setPostingRef(fauxString);
-		assertEquals(fauxString, posting.getPostingRef());
+		posting.setPostingRef(CommonTest.FAUX_STRING);
+		assertEquals(CommonTest.FAUX_STRING, posting.getPostingRef());
 		
 		assertNull(posting.getPostingPriority());
-		posting.setPostingPriority(fauxLong);
-		assertEquals(fauxLong, posting.getPostingPriority());
+		posting.setPostingPriority(CommonTest.FAUX_LONG);
+		assertEquals(CommonTest.FAUX_LONG, posting.getPostingPriority());
 				
 		assertNull(posting.getPostingName());
-		posting.setPostingName(fauxString);
-		assertEquals(fauxString, posting.getPostingName());
+		posting.setPostingName(CommonTest.FAUX_STRING);
+		assertEquals(CommonTest.FAUX_STRING, posting.getPostingName());
 		
 		assertNull(posting.getPostingUrl());
-		posting.setPostingUrl(fauxString);
-		assertEquals(fauxString, posting.getPostingUrl());
+		posting.setPostingUrl(CommonTest.FAUX_STRING);
+		assertEquals(CommonTest.FAUX_STRING, posting.getPostingUrl());
+		
+		assertNull(posting.getPostingFolder());
+		posting.setPostingFolder(CommonTest.FAUX_STRING);
+		assertEquals(CommonTest.FAUX_STRING, posting.getPostingFolder());
 
 		assertNull(posting.getCompanyName());
-		posting.setCompanyName(fauxString);
-		assertEquals(fauxString, posting.getCompanyName());
+		posting.setCompanyName(CommonTest.FAUX_STRING);
+		assertEquals(CommonTest.FAUX_STRING, posting.getCompanyName());
 		
 		assertNull(posting.getCompanyAddress());
-		posting.setCompanyAddress(fauxString);
-		assertEquals(fauxString, posting.getCompanyAddress());
+		posting.setCompanyAddress(CommonTest.FAUX_STRING);
+		assertEquals(CommonTest.FAUX_STRING, posting.getCompanyAddress());
+		
+		assertNull(posting.getComment());
+		posting.setComment(CommonTest.FAUX_STRING);
+		assertEquals(CommonTest.FAUX_STRING, posting.getComment());	
 		
 		assertNull(posting.getAppStatus());
 		posting.setAppStatus(Posting.APPLIED);
@@ -168,32 +169,40 @@ public class PostingTest {
 		assertNotNull(postingForm);
 		
 		assertNotNull(postingForm.getPostingDate());
-		postingForm.setPostingDate(fauxString);
-		assertEquals(fauxString, postingForm.getPostingDate());
+		postingForm.setPostingDate(CommonTest.FAUX_DATE);
+		assertEquals(CommonTest.FAUX_DATE, postingForm.getPostingDate());
 				
 		assertNull(postingForm.getPostingRef());
-		postingForm.setPostingRef(fauxString);
-		assertEquals(fauxString, postingForm.getPostingRef());
+		postingForm.setPostingRef(CommonTest.FAUX_STRING);
+		assertEquals(CommonTest.FAUX_STRING, postingForm.getPostingRef());
 		
 		assertNull(postingForm.getPostingName());
-		postingForm.setPostingName(fauxString);
-		assertEquals(fauxString, postingForm.getPostingName());
+		postingForm.setPostingName(CommonTest.FAUX_STRING);
+		assertEquals(CommonTest.FAUX_STRING, postingForm.getPostingName());
 		
 		assertNull(postingForm.getPostingUrl());
-		postingForm.setPostingUrl(fauxString);
-		assertEquals(fauxString, postingForm.getPostingUrl());
+		postingForm.setPostingUrl(CommonTest.FAUX_STRING);
+		assertEquals(CommonTest.FAUX_STRING, postingForm.getPostingUrl());
+		
+		assertNull(postingForm.getPostingFolder());
+		postingForm.setPostingFolder(CommonTest.FAUX_STRING);
+		assertEquals(CommonTest.FAUX_STRING, postingForm.getPostingFolder());
 
 		assertNull(postingForm.getCompanyName());
-		postingForm.setCompanyName(fauxString);
-		assertEquals(fauxString, postingForm.getCompanyName());
+		postingForm.setCompanyName(CommonTest.FAUX_STRING);
+		assertEquals(CommonTest.FAUX_STRING, postingForm.getCompanyName());
 		
 		assertNull(postingForm.getCompanyAddress());
-		postingForm.setCompanyAddress(fauxString);
-		assertEquals(fauxString, postingForm.getCompanyAddress());
+		postingForm.setCompanyAddress(CommonTest.FAUX_STRING);
+		assertEquals(CommonTest.FAUX_STRING, postingForm.getCompanyAddress());
+		
+		assertNull(postingForm.getComment());
+		postingForm.setComment(CommonTest.FAUX_STRING);
+		assertEquals(CommonTest.FAUX_STRING, postingForm.getComment());			
 		
 		assertEquals(1L, postingForm.getPostingPriority().longValue());
-		postingForm.setPostingPriority(fauxLong);
-		assertEquals(fauxLong.longValue(), postingForm.getPostingPriority().longValue());
+		postingForm.setPostingPriority(CommonTest.FAUX_LONG);
+		assertEquals(CommonTest.FAUX_LONG.longValue(), postingForm.getPostingPriority().longValue());
 		
 		assertTrue(postingForm.toString().startsWith("PostingForm"));
 		assertTrue(postingForm.equals(postingForm));
@@ -202,87 +211,102 @@ public class PostingTest {
 	}
 	
 	@Test
-	public void postingContstructorAllFields() {
+	public void postingContstructorAllFields() throws ParseException  {
 	
-		Posting posting = new Posting(fauxUUID,
-				fauxData.get("postingName"),
-				fauxData.get("postingRef"),
-				fauxData.get("postingUrl"),
-				fauxLong,
-				fauxData.get("postingDate"),
-				fauxData.get("companyName"),
-				fauxData.get("companyAddress"),
-				fauxData.get("appDate"),
-				fauxData.get("appStatus"),
-				fauxData.get("appStatusUrl"));
+		Posting posting = new Posting(CommonTest.FAUX_UUID,
+				CommonTest.FAUX_POSTING_DATA.get("postingName"),
+				CommonTest.FAUX_POSTING_DATA.get("postingRef"),
+				CommonTest.FAUX_POSTING_DATA.get("postingUrl"),
+				CommonTest.FAUX_LONG,
+				Date.valueOf(CommonTest.FAUX_POSTING_DATA.get("postingDate")),
+				CommonTest.FAUX_POSTING_DATA.get("postingFolder"),
+				CommonTest.FAUX_POSTING_DATA.get("companyName"),
+				CommonTest.FAUX_POSTING_DATA.get("companyAddress"),
+				CommonTest.FAUX_POSTING_DATA.get("comment"),
+				Date.valueOf(CommonTest.FAUX_POSTING_DATA.get("appDate")),
+				CommonTest.FAUX_POSTING_DATA.get("appStatus"),
+				CommonTest.FAUX_POSTING_DATA.get("appStatusUrl"),
+				null);
 
 		assertNotNull(posting);
 		
-		assertEquals(fauxUUID, posting.getId());
+		assertEquals(CommonTest.FAUX_UUID, posting.getId());
 		
-		assertEquals(fauxData.get("postingDate"), posting.getPostingDate());
-		
-		
-		assertEquals(fauxData.get("appDate"), posting.getAppDate());
+		assertEquals(Date.valueOf(CommonTest.FAUX_POSTING_DATA.get("postingDate")), posting.getPostingDate());
 		
 		
-		assertEquals(fauxData.get("appStatusUrl"), posting.getAppStatusUrl());
+		assertEquals(Date.valueOf(CommonTest.FAUX_POSTING_DATA.get("appDate")), posting.getAppDate());
 		
 		
-		assertEquals(fauxData.get("postingRef"), posting.getPostingRef());
+		assertEquals(CommonTest.FAUX_POSTING_DATA.get("appStatusUrl"), posting.getAppStatusUrl());
 		
-		assertEquals(fauxLong, posting.getPostingPriority());
+		
+		assertEquals(CommonTest.FAUX_POSTING_DATA.get("postingRef"), posting.getPostingRef());
+		
+		assertEquals(CommonTest.FAUX_LONG, posting.getPostingPriority());
 				
-		assertEquals(fauxData.get("postingName"), posting.getPostingName());
+		assertEquals(CommonTest.FAUX_POSTING_DATA.get("postingName"), posting.getPostingName());
 		
-		assertEquals(fauxData.get("postingUrl"), posting.getPostingUrl());
+		assertEquals(CommonTest.FAUX_POSTING_DATA.get("postingUrl"), posting.getPostingUrl());
+		
+		assertEquals(CommonTest.FAUX_POSTING_DATA.get("postingFolder"), posting.getPostingFolder());
 
-		assertEquals(fauxData.get("companyName"), posting.getCompanyName());
+		assertEquals(CommonTest.FAUX_POSTING_DATA.get("companyName"), posting.getCompanyName());
 		
-		assertEquals(fauxData.get("companyAddress"), posting.getCompanyAddress());
+		assertEquals(CommonTest.FAUX_POSTING_DATA.get("companyAddress"), posting.getCompanyAddress());
 		
-		assertEquals(fauxData.get("appStatus"), posting.getAppStatus());
+		assertEquals(CommonTest.FAUX_POSTING_DATA.get("comment"), posting.getComment());
+		
+		assertEquals(CommonTest.FAUX_POSTING_DATA.get("appStatus"), posting.getAppStatus());
 	}
 		
 	
 	@Test
 	public void postingFormContstructorAllFields() {
 		PostingForm postingForm = new PostingForm(
-				fauxData.get("postingName"),
-				fauxData.get("postingRef"),
-				fauxData.get("postingUrl"),
-				fauxLong,
-				fauxData.get("companyName"),
-				fauxData.get("companyAddress")
+				CommonTest.FAUX_POSTING_DATA.get("postingName"),
+				CommonTest.FAUX_POSTING_DATA.get("postingRef"),
+				CommonTest.FAUX_POSTING_DATA.get("postingUrl"),
+				CommonTest.FAUX_LONG,
+				CommonTest.FAUX_POSTING_DATA.get("postingFolder"),				
+				CommonTest.FAUX_POSTING_DATA.get("companyName"),
+				CommonTest.FAUX_POSTING_DATA.get("companyAddress"),
+				CommonTest.FAUX_POSTING_DATA.get("comment")
 		);
 		
 		assertNotNull(postingForm);
 		
 		assertNotNull(postingForm.getPostingDate());
 		
-		assertEquals(fauxData.get("postingRef"), postingForm.getPostingRef());
+		assertEquals(CommonTest.FAUX_POSTING_DATA.get("postingRef"), postingForm.getPostingRef());
 		
-		assertEquals(fauxLong, postingForm.getPostingPriority());
+		assertEquals(CommonTest.FAUX_LONG, postingForm.getPostingPriority());
 				
-		assertEquals(fauxData.get("postingName"), postingForm.getPostingName());
+		assertEquals(CommonTest.FAUX_POSTING_DATA.get("postingName"), postingForm.getPostingName());
 		
-		assertEquals(fauxData.get("postingUrl"), postingForm.getPostingUrl());
+		assertEquals(CommonTest.FAUX_POSTING_DATA.get("postingUrl"), postingForm.getPostingUrl());
+		
+		assertEquals(CommonTest.FAUX_POSTING_DATA.get("postingFolder"), postingForm.getPostingFolder());
 
-		assertEquals(fauxData.get("companyName"), postingForm.getCompanyName());
+		assertEquals(CommonTest.FAUX_POSTING_DATA.get("companyName"), postingForm.getCompanyName());
 		
-		assertEquals(fauxData.get("companyAddress"), postingForm.getCompanyAddress());
+		assertEquals(CommonTest.FAUX_POSTING_DATA.get("companyAddress"), postingForm.getCompanyAddress());
+		
+		assertEquals(CommonTest.FAUX_POSTING_DATA.get("comment"), postingForm.getComment());
 	
 	}
 	
 	@Test
 	public void postingConstructorCopy() {
 		PostingForm postingForm = new PostingForm(
-				fauxData.get("postingName"),
-				fauxData.get("postingRef"),
-				fauxData.get("postingUrl"),
-				fauxLong,
-				fauxData.get("companyName"),
-				fauxData.get("companyAddress")
+				CommonTest.FAUX_POSTING_DATA.get("postingName"),
+				CommonTest.FAUX_POSTING_DATA.get("postingRef"),
+				CommonTest.FAUX_POSTING_DATA.get("postingUrl"),
+				CommonTest.FAUX_LONG,
+				CommonTest.FAUX_POSTING_DATA.get("postingFolder"),				
+				CommonTest.FAUX_POSTING_DATA.get("companyName"),
+				CommonTest.FAUX_POSTING_DATA.get("companyAddress"),
+				CommonTest.FAUX_POSTING_DATA.get("comment")
 		);
 		
 		assertNotNull(postingForm);
@@ -301,20 +325,25 @@ public class PostingTest {
 		
 		assertNull(posting.getAppStatusUrl());
 		
-		assertEquals(fauxData.get("postingRef"), posting.getPostingRef());
+		assertEquals(CommonTest.FAUX_POSTING_DATA.get("postingRef"), posting.getPostingRef());
 		
-		assertEquals(fauxLong, posting.getPostingPriority());
+		assertEquals(CommonTest.FAUX_LONG, posting.getPostingPriority());
 				
-		assertEquals(fauxData.get("postingName"), posting.getPostingName());
+		assertEquals(CommonTest.FAUX_POSTING_DATA.get("postingName"), posting.getPostingName());
 		
-		assertEquals(fauxData.get("postingUrl"), posting.getPostingUrl());
+		assertEquals(CommonTest.FAUX_POSTING_DATA.get("postingUrl"), posting.getPostingUrl());
 
-		assertEquals(fauxData.get("companyName"), posting.getCompanyName());
+		assertEquals(CommonTest.FAUX_POSTING_DATA.get("postingFolder"), posting.getPostingFolder());
+
+		assertEquals(CommonTest.FAUX_POSTING_DATA.get("companyName"), posting.getCompanyName());
 		
-		assertEquals(fauxData.get("companyAddress"), posting.getCompanyAddress());
+		assertEquals(CommonTest.FAUX_POSTING_DATA.get("companyAddress"), posting.getCompanyAddress());
+		
+		assertEquals(CommonTest.FAUX_POSTING_DATA.get("comment"), posting.getComment());
 		
 		assertEquals(Posting.PENDING, posting.getAppStatus());
 
 	}
-
+	
+	
 }

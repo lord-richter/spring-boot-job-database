@@ -22,6 +22,11 @@
                 </li>
             </ul>
         </div>
+        <div class="d-flex flex-row-reverse">
+            <div th:if="${module == 'postings'}">
+				<a class="btn btn-primary" href="/postings/new">New Posting</a>
+            </div>
+        </div>        
     </div>
 </nav>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>

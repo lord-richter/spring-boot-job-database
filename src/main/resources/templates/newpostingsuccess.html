@@ -18,11 +18,12 @@
 					<h5 class="card-title" th:text="${posting.postingName}">name</h5>
 					<p class="card-text"><span th:text="${posting.companyName}">company</span><br/>
 					<span th:text="${posting.companyAddress}">address</span></p>
-					<p class="card-text"><a th:href="${posting.postingUrl}" th:text="${posting.postingUrl}">url</a></p>
+					<p class="card-text"><a th:href="${posting.postingUrl}" th:text="${posting.postingUrl}" target="_blank">url</a></p>
 					<p class="card-text">Application <span th:text="${posting.appStatus}">status</span> <span th:if="'Pending' != ${posting.appStatus}" th:text="${posting.appDate}">(date)</span></p>
 				</div>
 			</div>
 			<a class="btn btn-primary" href="/postings">Return to Postings</a>
+			<a class="btn btn-secondary" href="/postings" th:href="'/postings/edit/'+${posting.id}">Edit Posting</a>
 		</div>
 	</div>
 

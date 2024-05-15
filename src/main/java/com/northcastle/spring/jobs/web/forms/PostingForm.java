@@ -1,7 +1,8 @@
 package com.northcastle.spring.jobs.web.forms;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.sql.Date;
+import java.time.LocalDate;
+import java.time.ZoneId;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -25,16 +26,19 @@ public class PostingForm {
 	private String postingRef;
 
 	@NotNull(message = "Posting URL cannot be empty")
-	@Size(max=128)
+	@Size(max=256)
 	private String postingUrl;
 	
 	@Min(1)
 	@Max(10)
 	private Long postingPriority=1L;
 
+	@Size(max=64)
+	private String postingFolder;
+	
 	@NotNull
 	@EqualsAndHashCode.Include
-	private String postingDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date(System.currentTimeMillis()));
+	private Date postingDate = java.sql.Date.valueOf(LocalDate.ofInstant(new java.util.Date().toInstant(), ZoneId.systemDefault()));
 
 	@NotNull(message = "Company name cannot be empty")
 	@Size(min=2,max=64)	
@@ -44,6 +48,9 @@ public class PostingForm {
 	@NotNull(message = "Company location cannot be empty")
 	@Size(min=2,max=64)	
 	private String companyAddress;
+	
+	@Size(min=0,max=512)	
+	private String comment;
 
 	/**
 	 * Constructor for auditing and testing.
@@ -52,22 +59,28 @@ public class PostingForm {
 	 * @param postingRef
 	 * @param postingUrl
 	 * @param postingPriority
+	 * @param postingFolder
 	 * @param companyName
 	 * @param companyAddress
+	 * @param comment
 	 */
 	public PostingForm(@NotNull(message = "Posting name cannot be empty") @Size(min = 2, max = 64) String postingName,
 			@Size(max = 20) String postingRef,
-			@NotNull(message = "Posting URL cannot be empty") @Size(max = 128) String postingUrl,
+			@NotNull(message = "Posting URL cannot be empty") @Size(max = 256) String postingUrl,
 			@Min(1) @Max(10) Long postingPriority,
+			@Size(max = 64) String postingFolder,
 			@NotNull(message = "Company name cannot be empty") @Size(min = 2, max = 64) String companyName,
-			@NotNull(message = "Company location cannot be empty") @Size(min = 2, max = 64) String companyAddress) {
+			@NotNull(message = "Company location cannot be empty") @Size(min = 2, max = 64) String companyAddress,
+			@Size(min = 0, max = 512) String comment) {
 		super();
 		this.postingName = postingName;
 		this.postingRef = postingRef;
 		this.postingUrl = postingUrl;
 		this.postingPriority = postingPriority;
+		this.postingFolder = postingFolder;
 		this.companyName = companyName;
 		this.companyAddress = companyAddress;
+		this.comment = comment;
 	}
 
 	
