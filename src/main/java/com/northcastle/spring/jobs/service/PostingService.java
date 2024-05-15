@@ -129,8 +129,11 @@ public class PostingService {
 		}
 
 		// sanity check: clear app date if it gets set to pending
+		// otherwise, make sure that the app date gets transferred over
 		if (existing.getAppStatus().equals(Posting.PENDING)) {
 			existing.setAppDate(null);
+		} else {
+			existing.setAppDate(update.getAppDate());
 		}
 		
 		// status url is always updated to latest

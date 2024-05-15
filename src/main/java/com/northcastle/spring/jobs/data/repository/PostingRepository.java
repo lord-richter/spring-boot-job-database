@@ -12,7 +12,11 @@ import com.northcastle.spring.jobs.data.entity.Posting;
 @Repository
 public interface PostingRepository extends JpaRepository<Posting, UUID> {
 	
-	@Query(value="SELECT * FROM job.posting p WHERE p.app_status IS NOT 'Pending'",nativeQuery = true)
+	@Query(value="SELECT * FROM job.posting p WHERE p.app_status IS NOT 'Pending' ORDER BY posting_date DESC",nativeQuery = true)
 	List<Posting> findAllApplied();
+	
+	List<Posting> findAllByOrderByPostingDateAsc();
+	
+	List<Posting> findAllByOrderByPostingDateDesc();
 	
 }

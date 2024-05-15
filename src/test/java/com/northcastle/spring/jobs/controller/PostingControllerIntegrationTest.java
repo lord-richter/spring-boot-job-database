@@ -3,7 +3,6 @@ package com.northcastle.spring.jobs.controller;
 import static org.hamcrest.Matchers.containsString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -20,11 +19,11 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.web.servlet.MockMvc;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.northcastle.spring.jobs.CommonTest;
 import com.northcastle.spring.jobs.data.entity.Posting;
 import com.northcastle.spring.jobs.web.forms.PostingForm;
 
+import io.florianlopes.spring.test.web.servlet.request.MockMvcRequestBuilderUtils;
 import lombok.extern.slf4j.Slf4j;
 
 @SpringBootTest
@@ -80,7 +79,7 @@ public class PostingControllerIntegrationTest {
 	
 	@Test
 	@WithMockUser(username = "user1", password = "pwd", roles = "ADMIN")
-	void putNewPosting() throws Exception {
+	void postNewPosting() throws Exception {
 		PostingForm posting = new PostingForm(
 				CommonTest.FAUX_POSTINGFORM_DATA.get("postingName"),
 				CommonTest.FAUX_POSTINGFORM_DATA.get("postingRef"),
@@ -91,11 +90,7 @@ public class PostingControllerIntegrationTest {
 				CommonTest.FAUX_POSTINGFORM_DATA.get("companyAddress"),
 				CommonTest.FAUX_POSTINGFORM_DATA.get("comment"));
 		
-		ObjectMapper mapper = new ObjectMapper();
-		String jsonString = mapper.writeValueAsString(posting);
-		log.info("TEST.putNewPosting(): "+jsonString);
-		
-		log.debug("TEST.putNewPosting(): "+mockMvc.perform(post("/postings/new").content(jsonString).contentType("application/json"))
+		log.debug("TEST.postNewPosting(): "+mockMvc.perform(post("/postings/new").with(MockMvcRequestBuilderUtils.form(posting)))
 		.andExpect(status().isCreated())
 		.andExpect(content().string(containsString(posting.getCompanyAddress())))
 		.andExpect(content().string(containsString("New Posting Succeeded!")))
@@ -104,7 +99,7 @@ public class PostingControllerIntegrationTest {
 	
 	@Test
 	@WithMockUser(username = "user1", password = "pwd", roles = "ADMIN")
-	void putNewPosting_BadRequest() throws Exception {
+	void postNewPosting_BadRequest() throws Exception {
 		PostingForm posting = new PostingForm(
 				CommonTest.FAUX_POSTINGFORM_DATA.get("postingName"),
 				CommonTest.FAUX_POSTINGFORM_DATA.get("postingRef"),
@@ -115,11 +110,7 @@ public class PostingControllerIntegrationTest {
 				CommonTest.FAUX_POSTINGFORM_DATA.get("companyAddress"),
 				CommonTest.FAUX_POSTINGFORM_DATA.get("comment"));
 		
-		ObjectMapper mapper = new ObjectMapper();
-		String jsonString = mapper.writeValueAsString(posting);
-		log.info("TEST.putNewPosting_Bad(): "+jsonString);
-		
-		log.debug("TEST.putNewPosting_Bad(): "+mockMvc.perform(post("/postings/new").content(jsonString).contentType("application/json"))
+		log.debug("TEST.postNewPosting_Bad(): "+mockMvc.perform(post("/postings/new").with(MockMvcRequestBuilderUtils.form(posting)))
 		.andExpect(status().isCreated())
 		.andExpect(content().string(containsString(CommonTest.FAUX_POSTINGFORM_DATA.get("companyAddress"))))
 		.andExpect(content().string(containsString(CommonTest.FAUX_POSTINGFORM_DATA.get("postingName"))))
@@ -147,7 +138,7 @@ public class PostingControllerIntegrationTest {
 	
 	@Test
 	@WithMockUser(username = "user1", password = "pwd", roles = "ADMIN")
-	void putEditPosting() throws Exception {
+	void postEditPosting() throws Exception {
 		Posting existing = new Posting();
 		existing.setId(CommonTest.VALID_UUID_2);
 		existing.setPostingName(CommonTest.FAUX_POSTING_DATA.get("postingName"));
@@ -161,10 +152,7 @@ public class PostingControllerIntegrationTest {
 		existing.setAppStatusUrl(null);
 		existing.setAppStatus(Posting.PENDING);
 		
-		ObjectMapper mapper = new ObjectMapper();
-		String jsonString = mapper.writeValueAsString(existing);
-		log.info("TEST.putEditPosting(): "+jsonString);
-		log.debug("TEST.putEditPosting(): "+mockMvc.perform(put("/postings/edit/"+CommonTest.VALID_UUID_STRING_2).content(jsonString).contentType("application/json"))
+		log.debug("TEST.postEditPosting(): "+mockMvc.perform(post("/postings/edit/"+CommonTest.VALID_UUID_STRING_2).with(MockMvcRequestBuilderUtils.form(existing)))
 		.andExpect(status().isOk())
 		.andExpect(content().string(containsString(CommonTest.FAUX_POSTING_DATA.get("postingName"))))
 		.andExpect(content().string(containsString("Update Posting Succeeded!")))
@@ -174,11 +162,11 @@ public class PostingControllerIntegrationTest {
 
 	@Test
 	@WithMockUser(username = "user1", password = "pwd", roles = "ADMIN")
-	void putEditPosting_BadRequest() throws Exception {
+	void postEditPosting_BadRequest() throws Exception {
 		Posting existing = new Posting();
 		existing.setId(CommonTest.VALID_UUID_2);
 		existing.setPostingName(CommonTest.FAUX_POSTING_DATA.get("postingName"));
-		existing.setCompanyName(CommonTest.FAUX_POSTING_DATA.get("companyName"));
+		existing.setCompanyName(null);    // invalidates request
 		existing.setCompanyAddress(CommonTest.FAUX_POSTING_DATA.get("companyAddress"));
 		existing.setPostingRef(CommonTest.FAUX_POSTING_DATA.get("postingRef"));
 		existing.setPostingPriority(1L);
@@ -186,12 +174,9 @@ public class PostingControllerIntegrationTest {
 		existing.setPostingDate(Date.valueOf(CommonTest.FAUX_POSTING_DATA.get("postingDate")));
 		existing.setAppDate(null);
 		existing.setAppStatusUrl(null);
-		existing.setAppStatus(null);  // invalidates request
+		existing.setAppStatus(Posting.PENDING);
 		
-		ObjectMapper mapper = new ObjectMapper();
-		String jsonString = mapper.writeValueAsString(existing);
-		log.info("TEST.putEditPosting_Bad(): "+jsonString);
-		log.debug("TEST.putEditPosting_Bad(): "+mockMvc.perform(put("/postings/edit/"+CommonTest.VALID_UUID_STRING_2).content(jsonString).contentType("application/json"))
+		log.debug("TEST.postEditPosting_Bad(): "+mockMvc.perform(post("/postings/edit/"+CommonTest.VALID_UUID_STRING_2).with(MockMvcRequestBuilderUtils.form(existing)))		
 		.andExpect(status().isOk())
 		.andExpect(content().string(containsString(CommonTest.FAUX_POSTING_DATA.get("postingName"))))
 		.andExpect(content().string(containsString("Update Job Posting")))

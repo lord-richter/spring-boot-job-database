@@ -21,6 +21,7 @@
             Comment: <span th:text="${posting.comment}">(comment)</span><br/>
             Status: <span th:text="${posting.appStatus}">(status)</span><br/>
             <span th:text="${posting.appDate} ? 'Application date: ' + ${posting.appDate}">(date)</span>
+            <span th:text="${posting.appStatusUrl} ? 'Status URL: '"><a target="_blank" th:href="${posting.appStatusUrl}" th:text="${posting.apsStatusUrl}" >Status Link</a></span>
             </p>
         </div>
     </div>

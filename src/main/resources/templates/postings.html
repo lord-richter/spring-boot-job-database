@@ -18,19 +18,22 @@
 			<thead>
 				<tr>
 					<th scope="col">Date</th>
-					<th scope="col">Position</th>
 					<th scope="col">Company</th>
+					<th scope="col">Position</th>
+					<th scope="col">Reference</th>
 					<th scope="col">URL</th>
 					<th scope="col">Status</th>
 					<th scope="col"></th>
 				</tr>
 			</thead>
 			<tbody>
-				<tr th:each="i : ${#numbers.sequence(postings.size() - 1,0,-1)}"
-					th:with="posting=${postings[i]}">
+				<!--  <tr th:each="i : ${#numbers.sequence(postings.size() - 1,0,-1)}" 
+					th:with="posting=${postings[i]}"> -->
+				<tr th:each="posting : ${postings}"> 
 					<td th:text="${posting.postingDate}">Posting Date</td>
-					<td th:text="${posting.postingName}">Position</td>
 					<td th:text="${posting.companyName}">Company</td>
+					<td th:text="${posting.postingName}">Position</td>
+					<td th:text="${posting.postingRef}">Ref</td>
 					<td><a href="https://www.google.com" th:href="${posting.postingUrl}" target="_blank">Posting Link</a></td>
 					<td th:text="${posting.appStatus}">(status)</td>
 					<td>
