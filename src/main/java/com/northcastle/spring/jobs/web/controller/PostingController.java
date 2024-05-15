@@ -136,8 +136,10 @@ public class PostingController {
 		
 		model.addAttribute("message",updatePostingMessage);
 		model.addAttribute("posting",postingService.updatePosting(posting));
+		model.addAttribute("statuslist",new ArrayList<String>(STATUSLIST));
+		model.addAttribute("module", "postings");	
 		model.asMap().forEach((k,v)->{log.info("Controller.submitEditPosting() : "+k+" = "+v);});
-		return "newpostingsuccess";
+		return "editposting";
 	}
 	
 }
