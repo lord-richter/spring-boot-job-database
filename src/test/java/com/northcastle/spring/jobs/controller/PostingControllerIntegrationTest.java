@@ -155,7 +155,7 @@ public class PostingControllerIntegrationTest {
 		log.debug("TEST.postEditPosting(): "+mockMvc.perform(post("/postings/edit/"+CommonTest.VALID_UUID_STRING_2).with(MockMvcRequestBuilderUtils.form(existing)))
 		.andExpect(status().isOk())
 		.andExpect(content().string(containsString(CommonTest.FAUX_POSTING_DATA.get("postingName"))))
-		.andExpect(content().string(containsString("Update Posting Succeeded!")))
+		.andExpect(content().string(containsString("Update Job Posting")))
 		.andExpect(content().string(containsString("Pending")))
 		.andReturn().getResponse().getContentAsString());
 	}
