@@ -14,7 +14,7 @@
 			<div class="card-header">Update Job Posting</div>
 			<div class="card-body">
 
-				<form action="#" th:action="@{'/postings/edit/' + ${posting.id}}" method="post" th:object="${posting}">
+				<form action="#" th:action="@{'/postings/edit/' + ${module} + '/' + ${posting.id}}" method="post" th:object="${posting}">
 					<input type="hidden" th:field="*{id}" />
 					<!--  input type="hidden" th:field="*{appDate}"/ -->
 					<!--  input type="hidden" th:field="*{postingDate}" / -->
@@ -124,7 +124,8 @@
 					<br />
 					<div class="form-group row">
 						<div class="col-sm-8">
-							<a class="btn btn-danger" href="/postings" th:href="'/postings/view/'+${posting.id}">Return to Details</a>
+							<a class="btn btn-danger" href="/postings" th:if="${module=='postings'}" th:href="'/postings/view/'+${posting.id}">Return to Details</a>
+							<a class="btn btn-danger" href="/postings" th:if="${module=='applications'}" th:href="'/applications/view/'+${posting.id}">Return to Details</a>
 							<button class="btn btn-primary" type="submit">Update</button>
 						</div>
 						

@@ -47,7 +47,7 @@ public class PostingControllerIntegrationTest {
 		.andExpect(content().string(containsString("All Job Postings")))
 		.andReturn().getResponse().getContentAsString());
 	}
-
+	
 	@Test
 	@WithMockUser(username = "user1", password = "pwd", roles = "ADMIN")
 	void getPosting() throws Exception {
@@ -122,7 +122,7 @@ public class PostingControllerIntegrationTest {
 	@Test
 	@WithMockUser(username = "user1", password = "pwd", roles = "ADMIN")
 	void getEditPosting() throws Exception {
-		log.debug("TEST.getEditPosting(): "+mockMvc.perform(get("/postings/edit/"+CommonTest.VALID_UUID_STRING_2))
+		log.debug("TEST.getEditPosting(): "+mockMvc.perform(get("/postings/edit/postings/"+CommonTest.VALID_UUID_STRING_2))
 		.andExpect(status().isOk())
 		.andExpect(content().string(containsString("Update Job Posting")))
 		.andReturn().getResponse().getContentAsString());
@@ -131,7 +131,7 @@ public class PostingControllerIntegrationTest {
 	@Test
 	@WithMockUser(username = "user1", password = "pwd", roles = "ADMIN")
 	void getEditPosting_NotFound() throws Exception {
-		log.debug("TEST.getEditPosting_NotFound(): "+ mockMvc.perform(get("/postings/edit/"+CommonTest.UNKNOWN_UUID_STRING))
+		log.debug("TEST.getEditPosting_NotFound(): "+ mockMvc.perform(get("/postings/edit/postings/"+CommonTest.UNKNOWN_UUID_STRING))
 		.andExpect(status().isNotFound())
 		.andReturn().getResponse().getContentAsString());
 	}	
@@ -152,7 +152,7 @@ public class PostingControllerIntegrationTest {
 		existing.setAppStatusUrl(null);
 		existing.setAppStatus(Posting.PENDING);
 		
-		log.debug("TEST.postEditPosting(): "+mockMvc.perform(post("/postings/edit/"+CommonTest.VALID_UUID_STRING_2).with(MockMvcRequestBuilderUtils.form(existing)))
+		log.debug("TEST.postEditPosting(): "+mockMvc.perform(post("/postings/edit/postings/"+CommonTest.VALID_UUID_STRING_2).with(MockMvcRequestBuilderUtils.form(existing)))
 		.andExpect(status().isOk())
 		.andExpect(content().string(containsString(CommonTest.FAUX_POSTING_DATA.get("postingName"))))
 		.andExpect(content().string(containsString("Update Job Posting")))
@@ -176,7 +176,7 @@ public class PostingControllerIntegrationTest {
 		existing.setAppStatusUrl(null);
 		existing.setAppStatus(Posting.PENDING);
 		
-		log.debug("TEST.postEditPosting_Bad(): "+mockMvc.perform(post("/postings/edit/"+CommonTest.VALID_UUID_STRING_2).with(MockMvcRequestBuilderUtils.form(existing)))		
+		log.debug("TEST.postEditPosting_Bad(): "+mockMvc.perform(post("/postings/edit/postings/"+CommonTest.VALID_UUID_STRING_2).with(MockMvcRequestBuilderUtils.form(existing)))		
 		.andExpect(status().isOk())
 		.andExpect(content().string(containsString(CommonTest.FAUX_POSTING_DATA.get("postingName"))))
 		.andExpect(content().string(containsString("Update Job Posting")))

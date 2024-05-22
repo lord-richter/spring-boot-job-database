@@ -47,6 +47,14 @@ public class PostingServiceIntegrationTest {
 	}
 
 	@Test
+	void getAllApplications(){
+		int count = 3;  // depends on data.sql
+		List<Posting> postings = postingRepository.findAllApplied();
+		postings.forEach((v)->{log.info("TEST.getAllApplications(): "+v);});
+		assertEquals(count, postings.size());
+	}
+
+	@Test
 	void getPostingUUID(){
 		Posting posting = this.postingService.getPosting(CommonTest.VALID_UUID_1);
 		log.info("TEST.getPostingUUID(): "+posting);

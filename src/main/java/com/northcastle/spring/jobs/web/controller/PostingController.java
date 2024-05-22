@@ -75,6 +75,7 @@ public class PostingController {
 		PostingForm postingForm = new PostingForm();
 		log.info("Controller.startNewPosting(): "+postingForm);
 		model.addAttribute("postingForm", postingForm);
+		model.addAttribute("module", "postings");
 		return "newposting";
 	}
 
@@ -96,8 +97,8 @@ public class PostingController {
 		return "newpostingsuccess";
 	}
 	
-	@GetMapping("/edit/{id}")
-	public String startEditPosting(@PathVariable("id") UUID postingId, Model model) {
+	@GetMapping("/edit/{module}/{id}")
+	public String startEditPosting(@PathVariable("module") String module, @PathVariable("id") UUID postingId, Model model) {
 		Optional<Posting> posting_reference = this.postingRepository.findById(postingId);
 		if (posting_reference.isEmpty()) {
 			log.info("Controller.startEditPosting(): Posting not found");
@@ -114,13 +115,13 @@ public class PostingController {
 		
 		model.addAttribute("posting",editposting);
 		model.addAttribute("statuslist",new ArrayList<String>(STATUSLIST));
-		model.addAttribute("module", "postings");
+		model.addAttribute("module", module);
 		model.asMap().forEach((k,v)->{log.info("Controller.startEditPosting(): "+k+" = "+v);});
 		return "editposting";
 	}
 
-	@PostMapping("/edit/{id}")
-	public String submitEditPosting(@PathVariable("id") UUID postingId, @Valid Posting posting, BindingResult bindingResult, Model model) {
+	@PostMapping("/edit/{module}/{id}")
+	public String submitEditPosting(@PathVariable("module") String module,@PathVariable("id") UUID postingId, @Valid Posting posting, BindingResult bindingResult, Model model) {
 		log.info("Controller.submitEditPosting() :"+postingId);
 		log.info("Controller.submitEditPosting() :"+posting);
 		log.info("Controller.submitEditPosting() :"+bindingResult);
@@ -137,7 +138,7 @@ public class PostingController {
 		model.addAttribute("message",updatePostingMessage);
 		model.addAttribute("posting",postingService.updatePosting(posting));
 		model.addAttribute("statuslist",new ArrayList<String>(STATUSLIST));
-		model.addAttribute("module", "postings");	
+		model.addAttribute("module", module);	
 		model.asMap().forEach((k,v)->{log.info("Controller.submitEditPosting() : "+k+" = "+v);});
 		return "editposting";
 	}
