@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,7 +36,7 @@ public class ApplicationController {
 
 	@GetMapping
 	public String getApplications(Model model){
-		model.addAttribute("applications", this.postingRepository.findAllApplied());
+		model.addAttribute("applications", this.postingRepository.findByAppStatusIn(PostingRepository.allActiveStatus, Sort.by(Direction.DESC,"appDate")));
 		model.addAttribute("module", "applications");
 		model.asMap().forEach((k,v)->{log.info("Controller.startEditPosting(): "+k+" = "+v);});
 		return "applications";

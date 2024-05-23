@@ -9,6 +9,8 @@ import java.util.UUID;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -39,7 +42,7 @@ public class PostingController {
 	@Autowired
 	private final PostingService postingService;
 
-	public static List<String> STATUSLIST = Arrays.asList(Posting.PENDING,Posting.APPLIED,Posting.INTERVIEW,Posting.REJECTED,Posting.CLOSED);
+	public static List<String> STATUSLIST = Arrays.asList(Posting.PENDING,Posting.APPLIED,Posting.INTERVIEW,Posting.OFFER,Posting.REJECTED,Posting.ACCEPTED,Posting.CLOSED);
 	
 	@Value(value = "New Posting Succeeded!")
 	String newPostingMessage;
@@ -53,10 +56,16 @@ public class PostingController {
 	}
 
 	@GetMapping
-	public String getAllPostings(Model model){
-		model.addAttribute("postings", this.postingRepository.findAllByOrderByPostingDateDesc());
+	public String getAllPostings(@RequestParam(defaultValue="postingDate,DESC")String sort, Model model){
+		log.info("Controller.getAllPostings(): "+sort);
+		// split by field (0) and direction (1)
+		String[] parameters = sort.split(",");
+		String field = parameters[0];
+		// optional to handle values that cannot be converted
+		// quietly convert optional to direction at use, with default being DESC
+		Optional<Direction> direction = Direction.fromOptionalString(parameters[1]);
+		model.addAttribute("postings", this.postingRepository.findAll(Sort.by(direction==null?Direction.DESC:direction.get(),field)));
 		model.addAttribute("module", "postings");
-		log.info("Controller.getAllPostings()");
 		model.asMap().forEach((k,v) -> {log.info(k+" = "+v);});
 		return "postings";
 	}

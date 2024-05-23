@@ -1,4 +1,4 @@
-package com.northcastle.spring.jobs.controller;
+package com.northcastle.spring.jobs;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -15,8 +15,6 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.web.servlet.MockMvc;
-
-import com.northcastle.spring.jobs.CommonTest;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -43,7 +41,7 @@ public class ApplicationControllerIntegrationTest {
 	@Test
 	@WithMockUser(username = "user1", password = "pwd", roles = "ADMIN")
 	void getApplication() throws Exception {
-		log.debug("TEST.getApplication(): "+ mockMvc.perform(get("/applications/view/"+CommonTest.VALID_UUID_STRING_1))		
+		log.debug("TEST.getApplication(): "+ mockMvc.perform(get("/applications/view/"+CommonTest.VALID_POSTING_1.toString()))		
 		.andExpect(status().isOk())
 		.andExpect(content().string(containsString("Fisherman")))
 		.andExpect(content().string(containsString("Job Posting Details")))

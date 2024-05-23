@@ -2,6 +2,8 @@ package com.northcastle.spring.jobs.data.entity;
 import java.sql.Date;
 import java.util.UUID;
 
+import org.springframework.beans.BeanUtils;
+
 import com.northcastle.spring.jobs.web.forms.PostingForm;
 
 import jakarta.persistence.Column;
@@ -27,27 +29,22 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Posting {
 	
+	// master location of status values
 	public static final String PENDING = "Pending";
 	public static final String APPLIED = "Applied";
 	public static final String INTERVIEW = "Interview";
+	public static final String OFFER = "Offer";
 	public static final String REJECTED = "Rejected";
+	public static final String ACCEPTED = "Accepted";
 	public static final String CLOSED = "Closed";
 	
 	/**
-	 * Copy new posting to posting format
+	 * Copy new posting form to posting format
 	 * @param newPosting
 	 */
 	public Posting(PostingForm posting) {
 		this.id = null;
-		this.postingName = posting.getPostingName();
-		this.postingRef = posting.getPostingRef();
-		this.postingUrl = posting.getPostingUrl();
-		this.postingPriority = posting.getPostingPriority();
-		this.postingDate = posting.getPostingDate();
-		this.postingFolder = posting.getPostingFolder();
-		this.companyName = posting.getCompanyName();
-		this.companyAddress = posting.getCompanyAddress();
-		this.comment = posting.getComment();
+		BeanUtils.copyProperties(posting, this);
 		this.appDate = null;
 		this.appStatus = PENDING;
 		this.appStatusUrl = null;

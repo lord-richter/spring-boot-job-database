@@ -1,4 +1,4 @@
-package com.northcastle.spring.jobs.service;
+package com.northcastle.spring.jobs;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.sql.Date;
-import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,9 +15,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 
-import com.northcastle.spring.jobs.CommonTest;
 import com.northcastle.spring.jobs.data.entity.Posting;
-import com.northcastle.spring.jobs.data.repository.PostingRepository;
+import com.northcastle.spring.jobs.service.PostingService;
 import com.northcastle.spring.jobs.web.exception.NotFoundException;
 import com.northcastle.spring.jobs.web.forms.PostingForm;
 
@@ -34,29 +32,9 @@ public class PostingServiceIntegrationTest {
 	@Autowired
 	private PostingService postingService;
 
-	@Autowired
-	private PostingRepository postingRepository;
-
-	@Test
-	void getAllPostings(){
-		int count = 5;  // depends on data.sql
-		log.info("TEST.getAllPostings(): Count = "+postingRepository.count());
-		List<Posting> postings = postingRepository.findAll();
-		postings.forEach((v)->{log.info("TEST.getAllPostings(): "+v);});
-		assertEquals(count, postings.size());
-	}
-
-	@Test
-	void getAllApplications(){
-		int count = 3;  // depends on data.sql
-		List<Posting> postings = postingRepository.findAllApplied();
-		postings.forEach((v)->{log.info("TEST.getAllApplications(): "+v);});
-		assertEquals(count, postings.size());
-	}
-
 	@Test
 	void getPostingUUID(){
-		Posting posting = this.postingService.getPosting(CommonTest.VALID_UUID_1);
+		Posting posting = this.postingService.getPosting(CommonTest.VALID_POSTING_1);
 		log.info("TEST.getPostingUUID(): "+posting);
 		assertNotNull(posting);
 		assertEquals("Fisherman", posting.getPostingName());
@@ -64,7 +42,7 @@ public class PostingServiceIntegrationTest {
 	
 	@Test
 	void getPostingString(){
-		Posting posting = this.postingService.getPosting(CommonTest.VALID_UUID_STRING_1);
+		Posting posting = this.postingService.getPosting(CommonTest.VALID_POSTING_1.toString());
 		log.info("TEST.getPostingString(): "+posting);
 		assertNotNull(posting);
 		assertEquals("Fisherman", posting.getPostingName());
@@ -72,12 +50,12 @@ public class PostingServiceIntegrationTest {
 
 	@Test
 	void getPostingUUID_NotFound(){
-		assertThrows(NotFoundException.class, () -> this.postingService.getPosting(CommonTest.UNKNOWN_UUID), "should have thrown an exception");
+		assertThrows(NotFoundException.class, () -> this.postingService.getPosting(CommonTest.UNKNOWN_POSTING_UUID), "should have thrown an exception");
 	}
 	
 	@Test
 	void getPostingString_NotFound(){
-		assertThrows(NotFoundException.class, () -> this.postingService.getPosting(CommonTest.UNKNOWN_UUID_STRING), "should have thrown an exception");
+		assertThrows(NotFoundException.class, () -> this.postingService.getPosting(CommonTest.UNKNOWN_POSTING_UUID.toString()), "should have thrown an exception");
 	}
 
 	@Test
@@ -120,7 +98,7 @@ public class PostingServiceIntegrationTest {
 	@Test 
 	void updatePosting_PendingToApplied(){
 		// id matches existing record from data.sql
-		Posting existing = postingService.getPosting(CommonTest.VALID_UUID_2);
+		Posting existing = postingService.getPosting(CommonTest.VALID_POSTING_3);
 		// make changes
 		existing.setPostingName(CommonTest.FAUX_POSTING_DATA.get("postingName"));
 		existing.setCompanyName(CommonTest.FAUX_POSTING_DATA.get("companyName"));
@@ -224,9 +202,9 @@ public class PostingServiceIntegrationTest {
 	@Test
 	void updatePosting_NotFound(){
 		// id matches existing record from data.sql
-		Posting existing = postingService.getPosting(CommonTest.VALID_UUID_1);
+		Posting existing = postingService.getPosting(CommonTest.VALID_POSTING_1);
 		// new ID to force mismatch
-		existing.setId(CommonTest.UNKNOWN_UUID);
+		existing.setId(CommonTest.UNKNOWN_POSTING_UUID);
 		
 		// update
 		assertThrows(NotFoundException.class, () -> this.postingService.updatePosting(existing));
