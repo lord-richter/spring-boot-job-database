@@ -1,4 +1,4 @@
-package com.northcastle.spring.jobs.entity;
+package com.northcastle.spring.jobs;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -14,10 +14,9 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.northcastle.spring.jobs.CommonTest;
 import com.northcastle.spring.jobs.data.entity.Posting;
+import com.northcastle.spring.jobs.data.forms.PostingForm;
 import com.northcastle.spring.jobs.service.model.PostingModel;
-import com.northcastle.spring.jobs.web.forms.PostingForm;
 
 @SpringBootTest
 @AutoConfigureTestDatabase(replace = Replace.ANY)

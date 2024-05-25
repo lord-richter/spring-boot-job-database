@@ -2,7 +2,7 @@ package com.northcastle.spring.jobs.util;
 
 import java.util.UUID;
 
-import com.northcastle.spring.jobs.web.exception.BadRequestException;
+import com.northcastle.spring.jobs.exception.BadRequestException;
 
 import io.micrometer.common.util.StringUtils;
 

@@ -6,14 +6,13 @@ import java.time.ZoneId;
 import java.util.Optional;
 import java.util.UUID;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.northcastle.spring.jobs.data.entity.Posting;
+import com.northcastle.spring.jobs.data.forms.PostingForm;
 import com.northcastle.spring.jobs.data.repository.PostingRepository;
+import com.northcastle.spring.jobs.exception.NotFoundException;
 import com.northcastle.spring.jobs.util.Convert;
-import com.northcastle.spring.jobs.web.exception.NotFoundException;
-import com.northcastle.spring.jobs.web.forms.PostingForm;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -22,7 +21,6 @@ import lombok.extern.slf4j.Slf4j;
 public class PostingService {
 	private final PostingRepository postingRepository;
 
-	@Autowired
 	public PostingService(PostingRepository postingRepository) {
 		this.postingRepository = postingRepository;
 	}

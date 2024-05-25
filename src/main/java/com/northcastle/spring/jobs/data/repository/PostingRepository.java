@@ -1,10 +1,12 @@
 package com.northcastle.spring.jobs.data.repository;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import com.northcastle.spring.jobs.data.entity.Posting;
@@ -12,11 +14,9 @@ import com.northcastle.spring.jobs.data.entity.Posting;
 @Repository
 public interface PostingRepository extends JpaRepository<Posting, UUID> {
 	
-	@Query(value="SELECT * FROM job.posting p WHERE p.app_status IS NOT 'Pending' ORDER BY posting_date DESC",nativeQuery = true)
-	List<Posting> findAllApplied();
+	public final List<String> allActiveStatus = new ArrayList<String>(Arrays.asList(Posting.APPLIED,Posting.INTERVIEW,Posting.OFFER,Posting.ACCEPTED));
 	
-	List<Posting> findAllByOrderByPostingDateAsc();
-	
-	List<Posting> findAllByOrderByPostingDateDesc();
+	List<Posting> findByAppStatus(String appStatus, Sort sort);
+	List<Posting> findByAppStatusIn(List<String>appStatus, Sort sort);
 	
 }

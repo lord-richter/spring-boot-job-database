@@ -1,4 +1,4 @@
-package com.northcastle.spring.jobs.web.controller;
+package com.northcastle.spring.jobs.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
