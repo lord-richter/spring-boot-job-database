@@ -1,4 +1,4 @@
-package com.northcastle.spring.jobs.web.forms;
+package com.northcastle.spring.jobs.data.forms;
 
 import java.sql.Date;
 import java.time.LocalDate;

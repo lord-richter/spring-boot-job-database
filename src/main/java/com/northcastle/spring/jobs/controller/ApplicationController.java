@@ -1,4 +1,4 @@
-package com.northcastle.spring.jobs.web.controller;
+package com.northcastle.spring.jobs.controller;
 
 import java.util.ArrayList;
 import java.util.UUID;

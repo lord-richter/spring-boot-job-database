@@ -12,9 +12,9 @@ import java.util.UUID;
 import org.junit.jupiter.api.Test;
 
 import com.northcastle.spring.jobs.data.entity.Posting;
+import com.northcastle.spring.jobs.exception.BadRequestException;
+import com.northcastle.spring.jobs.exception.NotFoundException;
 import com.northcastle.spring.jobs.util.Convert;
-import com.northcastle.spring.jobs.web.exception.BadRequestException;
-import com.northcastle.spring.jobs.web.exception.NotFoundException;
 
 public class CommonTest {
 	

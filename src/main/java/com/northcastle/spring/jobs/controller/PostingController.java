@@ -1,4 +1,4 @@
-package com.northcastle.spring.jobs.web.controller;
+package com.northcastle.spring.jobs.controller;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,15 +18,16 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.northcastle.spring.jobs.data.entity.Posting;
+import com.northcastle.spring.jobs.data.forms.PostingForm;
 import com.northcastle.spring.jobs.data.repository.PostingRepository;
 import com.northcastle.spring.jobs.service.PostingService;
-import com.northcastle.spring.jobs.web.forms.PostingForm;
 
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -129,7 +130,7 @@ public class PostingController {
 		return "editposting";
 	}
 
-	@PostMapping("/edit/{module}/{id}")
+	@PutMapping("/edit/{module}/{id}")
 	public String submitEditPosting(@PathVariable("module") String module,@PathVariable("id") UUID postingId, @Valid Posting posting, BindingResult bindingResult, Model model) {
 		log.info("Controller.submitEditPosting() :"+postingId);
 		log.info("Controller.submitEditPosting() :"+posting);

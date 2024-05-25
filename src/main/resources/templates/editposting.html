@@ -14,7 +14,7 @@
 			<div class="card-header">Update Job Posting</div>
 			<div class="card-body">
 
-				<form action="#" th:action="@{'/postings/edit/' + ${module} + '/' + ${posting.id}}" method="post" th:object="${posting}">
+				<form action="#" th:action="@{'/postings/edit/' + ${module} + '/' + ${posting.id}}" method="put" th:object="${posting}">
 					<input type="hidden" th:field="*{id}" />
 					<!--  input type="hidden" th:field="*{appDate}"/ -->
 					<!--  input type="hidden" th:field="*{postingDate}" / -->

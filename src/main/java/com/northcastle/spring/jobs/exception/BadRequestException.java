@@ -1,4 +1,4 @@
-package com.northcastle.spring.jobs.web.exception;
+package com.northcastle.spring.jobs.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

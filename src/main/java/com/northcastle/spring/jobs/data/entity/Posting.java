@@ -4,7 +4,7 @@ import java.util.UUID;
 
 import org.springframework.beans.BeanUtils;
 
-import com.northcastle.spring.jobs.web.forms.PostingForm;
+import com.northcastle.spring.jobs.data.forms.PostingForm;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

@@ -15,8 +15,8 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.northcastle.spring.jobs.data.entity.Posting;
+import com.northcastle.spring.jobs.data.forms.PostingForm;
 import com.northcastle.spring.jobs.service.model.PostingModel;
-import com.northcastle.spring.jobs.web.forms.PostingForm;
 
 @SpringBootTest
 @AutoConfigureTestDatabase(replace = Replace.ANY)

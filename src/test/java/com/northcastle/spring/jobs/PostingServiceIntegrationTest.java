@@ -16,9 +16,9 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 
 import com.northcastle.spring.jobs.data.entity.Posting;
+import com.northcastle.spring.jobs.data.forms.PostingForm;
+import com.northcastle.spring.jobs.exception.NotFoundException;
 import com.northcastle.spring.jobs.service.PostingService;
-import com.northcastle.spring.jobs.web.exception.NotFoundException;
-import com.northcastle.spring.jobs.web.forms.PostingForm;
 
 import lombok.extern.slf4j.Slf4j;
 
