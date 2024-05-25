@@ -3,7 +3,6 @@ package com.northcastle.spring.jobs;
 import static org.hamcrest.Matchers.containsString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -140,7 +139,7 @@ public class PostingControllerIntegrationTest {
 	
 	@Test
 	@WithMockUser(username = "user1", password = "pwd", roles = "ADMIN")
-	void putEditPosting() throws Exception {
+	void postEditPosting() throws Exception {
 		Posting existing = new Posting();
 		existing.setId(CommonTest.VALID_POSTING_3);
 		existing.setPostingName(CommonTest.FAUX_POSTING_DATA.get("postingName"));
@@ -154,7 +153,7 @@ public class PostingControllerIntegrationTest {
 		existing.setAppStatusUrl(null);
 		existing.setAppStatus(Posting.PENDING);
 		
-		log.debug("TEST.putEditPosting(): "+mockMvc.perform(put("/postings/edit/postings/"+CommonTest.VALID_POSTING_3).with(MockMvcRequestBuilderUtils.form(existing)))
+		log.debug("TEST.putEditPosting(): "+mockMvc.perform(post("/postings/edit/postings/"+CommonTest.VALID_POSTING_3).with(MockMvcRequestBuilderUtils.form(existing)))
 		.andExpect(status().isOk())
 		.andExpect(content().string(containsString(CommonTest.FAUX_POSTING_DATA.get("postingName"))))
 		.andExpect(content().string(containsString("Update Job Posting")))
@@ -164,7 +163,7 @@ public class PostingControllerIntegrationTest {
 
 	@Test
 	@WithMockUser(username = "user1", password = "pwd", roles = "ADMIN")
-	void putEditPosting_BadRequest() throws Exception {
+	void postEditPosting_BadRequest() throws Exception {
 		Posting existing = new Posting();
 		existing.setId(CommonTest.VALID_POSTING_3);
 		existing.setPostingName(CommonTest.FAUX_POSTING_DATA.get("postingName"));
@@ -178,7 +177,7 @@ public class PostingControllerIntegrationTest {
 		existing.setAppStatusUrl(null);
 		existing.setAppStatus(Posting.PENDING);
 		
-		log.debug("TEST.putEditPosting_Bad(): "+mockMvc.perform(put("/postings/edit/postings/"+CommonTest.VALID_POSTING_3).with(MockMvcRequestBuilderUtils.form(existing)))		
+		log.debug("TEST.putEditPosting_Bad(): "+mockMvc.perform(post("/postings/edit/postings/"+CommonTest.VALID_POSTING_3).with(MockMvcRequestBuilderUtils.form(existing)))		
 		.andExpect(status().isOk())
 		.andExpect(content().string(containsString(CommonTest.FAUX_POSTING_DATA.get("postingName"))))
 		.andExpect(content().string(containsString("Update Job Posting")))
