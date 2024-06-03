@@ -48,6 +48,8 @@ public class Posting {
 		this.appDate = null;
 		this.appStatus = PENDING;
 		this.appStatusUrl = null;
+		this.recruiterEmail = null;
+		this.recruiterName = null;
 	}
 	
 
@@ -107,6 +109,14 @@ public class Posting {
 	@Size(max=256)	
 	private String appStatusUrl;
 
+	@Column(name="recruiter_name")
+	@Size(max=64)	
+	private String recruiterName;
+	
+	@Column(name="recruiter_email")
+	@Size(max=128)	
+	private String recruiterEmail;
+	
 	@Column(name="updated",nullable = true)
 	private Date updated;
 }

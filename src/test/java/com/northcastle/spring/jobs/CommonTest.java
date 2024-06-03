@@ -26,6 +26,8 @@ public class CommonTest {
 	public static final UUID FAUX_UUID = UUID.randomUUID();
 	public static final Long FAUX_LONG = 685492945L;
 	public static final Date FAUX_DATE = Date.valueOf("2024-01-01");
+	public static final String FAUX_EMAIL = "george@email.com";
+	public static final String FAUX_NAME = "George Jetson";
 	
 	public static final Map<String,String> FAUX_POSTING_DATA = Map.ofEntries(
 			new AbstractMap.SimpleEntry<String, String>("postingName","Fish Truck Driver"),
@@ -38,7 +40,9 @@ public class CommonTest {
 			new AbstractMap.SimpleEntry<String, String>("comment","This is a faux comment"),
 			new AbstractMap.SimpleEntry<String, String>("appDate","2024-01-02"),
 			new AbstractMap.SimpleEntry<String, String>("appStatus",Posting.APPLIED),
-			new AbstractMap.SimpleEntry<String, String>("appStatusUrl","http://faux.com")
+			new AbstractMap.SimpleEntry<String, String>("appStatusUrl","http://faux.com"),
+			new AbstractMap.SimpleEntry<String, String>("recruiterName","Bob Bones"),
+			new AbstractMap.SimpleEntry<String, String>("recruiterEmail","bones@noreply.com")
 			);
 	
 	public static final Map<String,String> FAUX_POSTINGFORM_DATA = Map.of(

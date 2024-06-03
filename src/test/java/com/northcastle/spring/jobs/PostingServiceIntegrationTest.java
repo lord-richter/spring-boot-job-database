@@ -80,6 +80,8 @@ public class PostingServiceIntegrationTest {
 		assertNotNull(posting.getPostingDate());
 		assertNull(posting.getAppDate());
 		assertNull(posting.getAppStatusUrl());
+		assertNull(posting.getRecruiterName());
+		assertNull(posting.getRecruiterEmail());
 		assertEquals(CommonTest.FAUX_POSTINGFORM_DATA.get("postingRef"), posting.getPostingRef());
 		assertEquals(CommonTest.FAUX_POSTINGFORM_DATA.get("postingName"), posting.getPostingName());
 		assertEquals(CommonTest.FAUX_POSTINGFORM_DATA.get("postingUrl"), posting.getPostingUrl());
@@ -110,6 +112,8 @@ public class PostingServiceIntegrationTest {
 		existing.setPostingUrl(CommonTest.FAUX_POSTING_DATA.get("postingUrl"));
 		existing.setPostingDate(Date.valueOf(CommonTest.FAUX_POSTING_DATA.get("postingDate")));
 		existing.setAppStatusUrl(CommonTest.FAUX_POSTING_DATA.get("appStatusUrl"));
+		existing.setRecruiterName(CommonTest.FAUX_NAME);
+		existing.setRecruiterEmail(CommonTest.FAUX_EMAIL);
 		existing.setAppStatus(Posting.APPLIED);
 		
 		// update
@@ -133,6 +137,8 @@ public class PostingServiceIntegrationTest {
 		assertEquals(existing.getComment(), posting.getComment());
 		assertEquals(existing.getAppStatus(), posting.getAppStatus());
 		assertEquals(existing.getAppStatusUrl(), posting.getAppStatusUrl());
+		assertEquals(existing.getRecruiterEmail(), posting.getRecruiterEmail());
+		assertEquals(existing.getRecruiterName(), posting.getRecruiterName());
 
 	}
 	
@@ -166,6 +172,8 @@ public class PostingServiceIntegrationTest {
 		assertEquals(existing.getAppStatus(), posting.getAppStatus());
 		assertEquals(existing.getAppDate(), posting.getAppDate());
 		assertEquals(existing.getAppStatusUrl(), posting.getAppStatusUrl());
+		assertEquals(existing.getRecruiterEmail(), posting.getRecruiterEmail());
+		assertEquals(existing.getRecruiterName(), posting.getRecruiterName());		
 	}
 	
 	@Test
@@ -195,6 +203,8 @@ public class PostingServiceIntegrationTest {
 		assertEquals(existing.getCompanyName(), posting.getCompanyName());
 		assertEquals(existing.getCompanyAddress(), posting.getCompanyAddress());
 		assertEquals(existing.getComment(), posting.getComment());
+		assertEquals(existing.getRecruiterEmail(), posting.getRecruiterEmail());
+		assertEquals(existing.getRecruiterName(), posting.getRecruiterName());
 		assertEquals(Posting.PENDING, posting.getAppStatus());
 		
 	}

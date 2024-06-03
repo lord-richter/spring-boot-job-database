@@ -26,5 +26,7 @@ public class PostingModel {
 	private Date   appDate;
 	private String appStatus;
 	private String appStatusUrl;
+	private String recruiterName;
+	private String recruiterEmail;
 	private Date   updated;
 }

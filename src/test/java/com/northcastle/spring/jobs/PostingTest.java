@@ -225,6 +225,8 @@ public class PostingTest {
 				Date.valueOf(CommonTest.FAUX_POSTING_DATA.get("appDate")),
 				CommonTest.FAUX_POSTING_DATA.get("appStatus"),
 				CommonTest.FAUX_POSTING_DATA.get("appStatusUrl"),
+				CommonTest.FAUX_POSTING_DATA.get("recruiterName"),
+				CommonTest.FAUX_POSTING_DATA.get("recruiterEmail"),
 				null);
 
 		assertNotNull(posting);
@@ -255,6 +257,10 @@ public class PostingTest {
 		assertEquals(CommonTest.FAUX_POSTING_DATA.get("companyAddress"), posting.getCompanyAddress());
 		
 		assertEquals(CommonTest.FAUX_POSTING_DATA.get("comment"), posting.getComment());
+		
+		assertEquals(CommonTest.FAUX_POSTING_DATA.get("recruiterName"), posting.getRecruiterName());
+		
+		assertEquals(CommonTest.FAUX_POSTING_DATA.get("recruiterEmail"), posting.getRecruiterEmail());
 		
 		assertEquals(CommonTest.FAUX_POSTING_DATA.get("appStatus"), posting.getAppStatus());
 	}
@@ -323,6 +329,10 @@ public class PostingTest {
 		assertNull(posting.getAppDate());
 		
 		assertNull(posting.getAppStatusUrl());
+		
+		assertNull(posting.getRecruiterEmail());
+		
+		assertNull(posting.getRecruiterName());
 		
 		assertEquals(CommonTest.FAUX_POSTING_DATA.get("postingRef"), posting.getPostingRef());
 		

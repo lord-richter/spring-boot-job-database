@@ -116,6 +116,8 @@ public class PostingService {
 		existing.setPostingFolder(update.getPostingFolder());
 		existing.setPostingRef(update.getPostingRef());
 		existing.setPostingUrl(update.getPostingUrl());
+		existing.setRecruiterEmail(update.getRecruiterEmail());
+		existing.setRecruiterName(update.getRecruiterName());
 		
 		// if status changed, special handling
 		if (!existing.getAppStatus().equals(update.getAppStatus())) {

@@ -151,6 +151,8 @@ public class PostingControllerIntegrationTest {
 		existing.setPostingDate(Date.valueOf(CommonTest.FAUX_POSTING_DATA.get("postingDate")));
 		existing.setAppDate(null);
 		existing.setAppStatusUrl(null);
+		existing.setRecruiterEmail(null);
+		existing.setRecruiterName(null);
 		existing.setAppStatus(Posting.PENDING);
 		
 		log.debug("TEST.putEditPosting(): "+mockMvc.perform(post("/postings/edit/postings/"+CommonTest.VALID_POSTING_3).with(MockMvcRequestBuilderUtils.form(existing)))
