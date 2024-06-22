@@ -12,7 +12,7 @@ public class BaseController {
 	}
 
 	@GetMapping
-	public String getWelcome(){
+	public String getWelcome() {
 		return "index";
 	}
 

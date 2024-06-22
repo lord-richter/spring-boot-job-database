@@ -16,45 +16,46 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @NoArgsConstructor
 public class PostingForm {
-	
+
 	@NotNull(message = "Posting name cannot be empty")
-	@Size(min=2,max=64)
+	@Size(min = 2, max = 64)
 	@EqualsAndHashCode.Include
 	private String postingName;
 
-	@Size(max=20)
+	@Size(max = 20)
 	private String postingRef;
 
 	@NotNull(message = "Posting URL cannot be empty")
-	@Size(max=256)
+	@Size(max = 256)
 	private String postingUrl;
-	
+
 	@Min(1)
 	@Max(10)
-	private Long postingPriority=1L;
+	private Long postingPriority = 1L;
 
-	@Size(max=64)
+	@Size(max = 64)
 	private String postingFolder;
-	
+
 	@NotNull
 	@EqualsAndHashCode.Include
-	private Date postingDate = java.sql.Date.valueOf(LocalDate.ofInstant(new java.util.Date().toInstant(), ZoneId.systemDefault()));
+	private Date postingDate = java.sql.Date
+			.valueOf(LocalDate.ofInstant(new java.util.Date().toInstant(), ZoneId.systemDefault()));
 
 	@NotNull(message = "Company name cannot be empty")
-	@Size(min=2,max=64)	
+	@Size(min = 2, max = 64)
 	@EqualsAndHashCode.Include
 	private String companyName;
 
 	@NotNull(message = "Company location cannot be empty")
-	@Size(min=2,max=64)	
+	@Size(min = 2, max = 64)
 	private String companyAddress;
-	
-	@Size(min=0,max=512)	
+
+	@Size(min = 0, max = 512)
 	private String comment;
 
 	/**
-	 * Constructor for auditing and testing.
-	 * Date is set to today.
+	 * Constructor for auditing and testing. Date is set to today.
+	 *
 	 * @param postingName
 	 * @param postingRef
 	 * @param postingUrl
@@ -67,8 +68,7 @@ public class PostingForm {
 	public PostingForm(@NotNull(message = "Posting name cannot be empty") @Size(min = 2, max = 64) String postingName,
 			@Size(max = 20) String postingRef,
 			@NotNull(message = "Posting URL cannot be empty") @Size(max = 256) String postingUrl,
-			@Min(1) @Max(10) Long postingPriority,
-			@Size(max = 64) String postingFolder,
+			@Min(1) @Max(10) Long postingPriority, @Size(max = 64) String postingFolder,
 			@NotNull(message = "Company name cannot be empty") @Size(min = 2, max = 64) String companyName,
 			@NotNull(message = "Company location cannot be empty") @Size(min = 2, max = 64) String companyAddress,
 			@Size(min = 0, max = 512) String comment) {
@@ -83,6 +83,4 @@ public class PostingForm {
 		this.comment = comment;
 	}
 
-	
-	
 }

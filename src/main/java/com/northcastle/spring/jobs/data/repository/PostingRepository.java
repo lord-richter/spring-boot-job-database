@@ -13,10 +13,12 @@ import com.northcastle.spring.jobs.data.entity.Posting;
 
 @Repository
 public interface PostingRepository extends JpaRepository<Posting, UUID> {
-	
-	public final List<String> allActiveStatus = new ArrayList<String>(Arrays.asList(Posting.APPLIED,Posting.INTERVIEW,Posting.OFFER,Posting.ACCEPTED));
-	
+
+	public final List<String> allActiveStatus = new ArrayList<>(
+			Arrays.asList(Posting.APPLIED, Posting.INTERVIEW, Posting.OFFER, Posting.ACCEPTED));
+
 	List<Posting> findByAppStatus(String appStatus, Sort sort);
-	List<Posting> findByAppStatusIn(List<String>appStatus, Sort sort);
-	
+
+	List<Posting> findByAppStatusIn(List<String> appStatus, Sort sort);
+
 }
