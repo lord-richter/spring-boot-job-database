@@ -31,112 +31,66 @@ import lombok.extern.slf4j.Slf4j;
 @DirtiesContext(classMode = ClassMode.AFTER_EACH_TEST_METHOD)
 @Slf4j
 public class PostingControllerIntegrationTest {
-	
+
 	@Autowired
 	MockMvc mockMvc;
 
 	@Test
 	@WithMockUser(username = "user1", password = "pwd", roles = "ADMIN")
 	void getAllPostings() throws Exception {
-		log.debug("TEST.getAllPostings(): "+mockMvc.perform(get("/postings"))
-		.andExpect(status().isOk())
-		// we are getting a webpage back from all of these queries
-		.andExpect(content().string(containsString("Fisherman")))
-		.andExpect(content().string(containsString("Pilot")))
-		.andExpect(content().string(containsString("Professional Fish Cleaner")))
-		.andExpect(content().string(containsString("All Job Postings")))
-		// we are returning all of this as a string for debug purposes
-		.andReturn().getResponse().getContentAsString());
-	}
-	
-	@Test
-	@WithMockUser(username = "user1", password = "pwd", roles = "ADMIN")
-	void getPosting() throws Exception {
-		log.debug("TEST.getPosting(): "+ mockMvc.perform(get("/postings/view/"+CommonTest.VALID_POSTING_1))		
-		.andExpect(status().isOk())
-		.andExpect(content().string(containsString("Fisherman")))
-		.andExpect(content().string(containsString("Job Posting Details")))
-		.andExpect(content().string(containsString("Folder 1")))
-		.andReturn().getResponse().getContentAsString());
+		log.debug("TEST.getAllPostings(): " + mockMvc.perform(get("/postings")).andExpect(status().isOk())
+				// we are getting a webpage back from all of these queries
+				.andExpect(content().string(containsString("Fisherman")))
+				.andExpect(content().string(containsString("Pilot")))
+				.andExpect(content().string(containsString("Professional Fish Cleaner")))
+				.andExpect(content().string(containsString("All Job Postings")))
+				// we are returning all of this as a string for debug purposes
+				.andReturn().getResponse().getContentAsString());
 	}
 
 	@Test
 	@WithMockUser(username = "user1", password = "pwd", roles = "ADMIN")
-	void getPosting_NotFound() throws Exception {
-		log.debug("TEST.getPosting_notFound(): "+ mockMvc.perform(get("/postings/view/"+CommonTest.UNKNOWN_POSTING_UUID))
-		.andExpect(status().isNotFound())
-		.andReturn().getResponse().getContentAsString());
+	void getEditPosting() throws Exception {
+		log.debug("TEST.getEditPosting(): "
+				+ mockMvc.perform(get("/postings/edit/postings/" + CommonTest.VALID_POSTING_3))
+						.andExpect(status().isOk()).andExpect(content().string(containsString("Update Job Posting")))
+						.andReturn().getResponse().getContentAsString());
+	}
+
+	@Test
+	@WithMockUser(username = "user1", password = "pwd", roles = "ADMIN")
+	void getEditPosting_NotFound() throws Exception {
+		log.debug("TEST.getEditPosting_NotFound(): "
+				+ mockMvc.perform(get("/postings/edit/postings/" + CommonTest.UNKNOWN_POSTING_UUID))
+						.andExpect(status().isNotFound()).andReturn().getResponse().getContentAsString());
 	}
 
 	@Test
 	@WithMockUser(username = "user1", password = "pwd", roles = "ADMIN")
 	void getNewPosting() throws Exception {
-		log.debug("TEST.getNewPosting(): "+mockMvc.perform(get("/postings/new"))
-		.andExpect(status().isOk())
-		.andExpect(content().string(containsString("New Job Posting")))
-		.andReturn().getResponse().getContentAsString());
+		log.debug("TEST.getNewPosting(): " + mockMvc.perform(get("/postings/new")).andExpect(status().isOk())
+				.andExpect(content().string(containsString("New Job Posting"))).andReturn().getResponse()
+				.getContentAsString());
 	}
-	
-	
-	@Test
-	@WithMockUser(username = "user1", password = "pwd", roles = "ADMIN")
-	void postNewPosting() throws Exception {
-		PostingForm posting = new PostingForm(
-				CommonTest.FAUX_POSTINGFORM_DATA.get("postingName"),
-				CommonTest.FAUX_POSTINGFORM_DATA.get("postingRef"),
-				CommonTest.FAUX_POSTINGFORM_DATA.get("postingUrl"),
-				3L,
-				CommonTest.FAUX_POSTINGFORM_DATA.get("postingFolder"),
-				CommonTest.FAUX_POSTINGFORM_DATA.get("companyName"),
-				CommonTest.FAUX_POSTINGFORM_DATA.get("companyAddress"),
-				CommonTest.FAUX_POSTINGFORM_DATA.get("comment"));
-		
-		log.debug("TEST.postNewPosting(): "+mockMvc.perform(post("/postings/new").with(MockMvcRequestBuilderUtils.form(posting)))
-		.andExpect(status().isCreated())
-		.andExpect(content().string(containsString(posting.getCompanyAddress())))
-		.andExpect(content().string(containsString("New Posting Succeeded!")))
-		.andReturn().getResponse().getContentAsString());
-	}
-	
-	@Test
-	@WithMockUser(username = "user1", password = "pwd", roles = "ADMIN")
-	void postNewPosting_BadRequest() throws Exception {
-		PostingForm posting = new PostingForm(
-				CommonTest.FAUX_POSTINGFORM_DATA.get("postingName"),
-				CommonTest.FAUX_POSTINGFORM_DATA.get("postingRef"),
-				CommonTest.FAUX_POSTINGFORM_DATA.get("postingUrl"),
-				300L,   // invalidates form
-				CommonTest.FAUX_POSTINGFORM_DATA.get("postingFolder"),
-				CommonTest.FAUX_POSTINGFORM_DATA.get("companyName"),
-				CommonTest.FAUX_POSTINGFORM_DATA.get("companyAddress"),
-				CommonTest.FAUX_POSTINGFORM_DATA.get("comment"));
-		
-		log.debug("TEST.postNewPosting_Bad(): "+mockMvc.perform(post("/postings/new").with(MockMvcRequestBuilderUtils.form(posting)))
-		.andExpect(status().isCreated())
-		.andExpect(content().string(containsString(CommonTest.FAUX_POSTINGFORM_DATA.get("companyAddress"))))
-		.andExpect(content().string(containsString(CommonTest.FAUX_POSTINGFORM_DATA.get("postingName"))))
-		.andExpect(content().string(containsString("New Job Posting")))
-		.andReturn().getResponse().getContentAsString());
-	}
-	
 
 	@Test
 	@WithMockUser(username = "user1", password = "pwd", roles = "ADMIN")
-	void getEditPosting() throws Exception {
-		log.debug("TEST.getEditPosting(): "+mockMvc.perform(get("/postings/edit/postings/"+CommonTest.VALID_POSTING_3))
-		.andExpect(status().isOk())
-		.andExpect(content().string(containsString("Update Job Posting")))
-		.andReturn().getResponse().getContentAsString());
-	}	
+	void getPosting() throws Exception {
+		log.debug("TEST.getPosting(): " + mockMvc.perform(get("/postings/view/" + CommonTest.VALID_POSTING_1))
+				.andExpect(status().isOk()).andExpect(content().string(containsString("Fisherman")))
+				.andExpect(content().string(containsString("Job Posting Details")))
+				.andExpect(content().string(containsString("Folder 1"))).andReturn().getResponse()
+				.getContentAsString());
+	}
 
 	@Test
 	@WithMockUser(username = "user1", password = "pwd", roles = "ADMIN")
-	void getEditPosting_NotFound() throws Exception {
-		log.debug("TEST.getEditPosting_NotFound(): "+ mockMvc.perform(get("/postings/edit/postings/"+CommonTest.UNKNOWN_POSTING_UUID))
-		.andExpect(status().isNotFound())
-		.andReturn().getResponse().getContentAsString());
-	}	
-	
+	void getPosting_NotFound() throws Exception {
+		log.debug("TEST.getPosting_notFound(): "
+				+ mockMvc.perform(get("/postings/view/" + CommonTest.UNKNOWN_POSTING_UUID))
+						.andExpect(status().isNotFound()).andReturn().getResponse().getContentAsString());
+	}
+
 	@Test
 	@WithMockUser(username = "user1", password = "pwd", roles = "ADMIN")
 	void postEditPosting() throws Exception {
@@ -151,14 +105,17 @@ public class PostingControllerIntegrationTest {
 		existing.setPostingDate(Date.valueOf(CommonTest.FAUX_POSTING_DATA.get("postingDate")));
 		existing.setAppDate(null);
 		existing.setAppStatusUrl(null);
+		existing.setRecruiterEmail(null);
+		existing.setRecruiterName(null);
 		existing.setAppStatus(Posting.PENDING);
-		
-		log.debug("TEST.putEditPosting(): "+mockMvc.perform(post("/postings/edit/postings/"+CommonTest.VALID_POSTING_3).with(MockMvcRequestBuilderUtils.form(existing)))
-		.andExpect(status().isOk())
-		.andExpect(content().string(containsString(CommonTest.FAUX_POSTING_DATA.get("postingName"))))
-		.andExpect(content().string(containsString("Update Job Posting")))
-		.andExpect(content().string(containsString("Pending")))
-		.andReturn().getResponse().getContentAsString());
+
+		log.debug("TEST.putEditPosting(): " + mockMvc
+				.perform(post("/postings/edit/postings/" + CommonTest.VALID_POSTING_3)
+						.with(MockMvcRequestBuilderUtils.form(existing)))
+				.andExpect(status().isOk())
+				.andExpect(content().string(containsString(CommonTest.FAUX_POSTING_DATA.get("postingName"))))
+				.andExpect(content().string(containsString("Update Job Posting")))
+				.andExpect(content().string(containsString("Pending"))).andReturn().getResponse().getContentAsString());
 	}
 
 	@Test
@@ -167,7 +124,7 @@ public class PostingControllerIntegrationTest {
 		Posting existing = new Posting();
 		existing.setId(CommonTest.VALID_POSTING_3);
 		existing.setPostingName(CommonTest.FAUX_POSTING_DATA.get("postingName"));
-		existing.setCompanyName(null);    // invalidates request
+		existing.setCompanyName(null); // invalidates request
 		existing.setCompanyAddress(CommonTest.FAUX_POSTING_DATA.get("companyAddress"));
 		existing.setPostingRef(CommonTest.FAUX_POSTING_DATA.get("postingRef"));
 		existing.setPostingPriority(1L);
@@ -176,14 +133,53 @@ public class PostingControllerIntegrationTest {
 		existing.setAppDate(null);
 		existing.setAppStatusUrl(null);
 		existing.setAppStatus(Posting.PENDING);
-		
-		log.debug("TEST.putEditPosting_Bad(): "+mockMvc.perform(post("/postings/edit/postings/"+CommonTest.VALID_POSTING_3).with(MockMvcRequestBuilderUtils.form(existing)))		
-		.andExpect(status().isOk())
-		.andExpect(content().string(containsString(CommonTest.FAUX_POSTING_DATA.get("postingName"))))
-		.andExpect(content().string(containsString("Update Job Posting")))
-		.andExpect(content().string(containsString("Pending")))
-		.andReturn().getResponse().getContentAsString());
 
+		log.debug("TEST.putEditPosting_Bad(): " + mockMvc
+				.perform(post("/postings/edit/postings/" + CommonTest.VALID_POSTING_3)
+						.with(MockMvcRequestBuilderUtils.form(existing)))
+				.andExpect(status().isOk())
+				.andExpect(content().string(containsString(CommonTest.FAUX_POSTING_DATA.get("postingName"))))
+				.andExpect(content().string(containsString("Update Job Posting")))
+				.andExpect(content().string(containsString("Pending"))).andReturn().getResponse().getContentAsString());
+
+	}
+
+	@Test
+	@WithMockUser(username = "user1", password = "pwd", roles = "ADMIN")
+	void postNewPosting() throws Exception {
+		PostingForm posting = new PostingForm(CommonTest.FAUX_POSTINGFORM_DATA.get("postingName"),
+				CommonTest.FAUX_POSTINGFORM_DATA.get("postingRef"), CommonTest.FAUX_POSTINGFORM_DATA.get("postingUrl"),
+				3L, CommonTest.FAUX_POSTINGFORM_DATA.get("postingFolder"),
+				CommonTest.FAUX_POSTINGFORM_DATA.get("companyName"),
+				CommonTest.FAUX_POSTINGFORM_DATA.get("companyAddress"),
+				CommonTest.FAUX_POSTINGFORM_DATA.get("comment"));
+
+		log.debug("TEST.postNewPosting(): "
+				+ mockMvc.perform(post("/postings/new").with(MockMvcRequestBuilderUtils.form(posting)))
+						.andExpect(status().isCreated())
+						.andExpect(content().string(containsString(posting.getCompanyAddress())))
+						.andExpect(content().string(containsString("New Posting Succeeded!"))).andReturn().getResponse()
+						.getContentAsString());
+	}
+
+	@Test
+	@WithMockUser(username = "user1", password = "pwd", roles = "ADMIN")
+	void postNewPosting_BadRequest() throws Exception {
+		PostingForm posting = new PostingForm(CommonTest.FAUX_POSTINGFORM_DATA.get("postingName"),
+				CommonTest.FAUX_POSTINGFORM_DATA.get("postingRef"), CommonTest.FAUX_POSTINGFORM_DATA.get("postingUrl"),
+				300L, // invalidates form
+				CommonTest.FAUX_POSTINGFORM_DATA.get("postingFolder"),
+				CommonTest.FAUX_POSTINGFORM_DATA.get("companyName"),
+				CommonTest.FAUX_POSTINGFORM_DATA.get("companyAddress"),
+				CommonTest.FAUX_POSTINGFORM_DATA.get("comment"));
+
+		log.debug("TEST.postNewPosting_Bad(): " + mockMvc
+				.perform(post("/postings/new").with(MockMvcRequestBuilderUtils.form(posting)))
+				.andExpect(status().isCreated())
+				.andExpect(content().string(containsString(CommonTest.FAUX_POSTINGFORM_DATA.get("companyAddress"))))
+				.andExpect(content().string(containsString(CommonTest.FAUX_POSTINGFORM_DATA.get("postingName"))))
+				.andExpect(content().string(containsString("New Job Posting"))).andReturn().getResponse()
+				.getContentAsString());
 	}
 
 //	@Test
@@ -191,5 +187,3 @@ public class PostingControllerIntegrationTest {
 //		// unsupported operation in this version
 //	}
 }
-
-

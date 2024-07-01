@@ -16,11 +16,11 @@ import org.springframework.stereotype.Component;
 public class SampleCustomActuator {
 
 	// .../custom?text=SomeText
-    @ReadOperation
-    public Map<String, String> customEndpoint(String text){
-        Map<String, String> map = new HashMap<>();
-        map.put("text", text);
-        return map;
-    }
+	@ReadOperation
+	public Map<String, String> customEndpoint(String text) {
+		Map<String, String> map = new HashMap<>();
+		map.put("text", text);
+		return map;
+	}
 
 }

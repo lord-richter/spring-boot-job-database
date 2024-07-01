@@ -16,15 +16,17 @@ public class PostingModel {
 	private UUID id;
 	private String postingName;
 	private String postingRef;
-	private Long   postingPriority;
+	private Long postingPriority;
 	private String postingUrl;
-	private Date   postingDate;
+	private Date postingDate;
 	private String postingFolder;
 	private String companyName;
 	private String companyAddress;
 	private String comment;
-	private Date   appDate;
+	private Date appDate;
 	private String appStatus;
 	private String appStatusUrl;
-	private Date   updated;
+	private String recruiterName;
+	private String recruiterEmail;
+	private Date updated;
 }

@@ -83,7 +83,7 @@
 							<input class="form-control" type="text" th:field="*{postingFolder}" />
 						</div>
 						<label class="col-sm-2 col-form-label" th:if="${#fields.hasErrors('postingFolder')}" th:errors="*{postingFolder}">(error)</label>
-					</div><br/>											
+					</div>										
 					<br />
 					<div class="form-group row">
 						<label class="col-sm-2 col-form-label">Comment:</label>
@@ -93,6 +93,16 @@
 						<label class="col-sm-2 col-form-label" th:if="${#fields.hasErrors('comment')}"
 							th:errors="*{comment}">(error)</label>
 					</div>
+					<br />	
+					<div class="form-group row">
+						<label class="col-sm-2 col-form-label">Recruiter:</label>
+						<div class="col-sm-4">
+							<input class="form-control" type="text" placeholder="name" th:field="*{recruiterName}" />
+						</div>
+						<div class="col-sm-4">
+							<input class="form-control" type="email" placeholder="email" th:field="*{recruiterEmail}" />
+						</div>
+					</div>					
 					<br />					
 					<div class="form-group row">
 						<label class="col-sm-2 col-form-label">Application Status:</label>

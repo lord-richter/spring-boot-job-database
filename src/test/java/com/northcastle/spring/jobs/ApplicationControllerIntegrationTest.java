@@ -24,31 +24,28 @@ import lombok.extern.slf4j.Slf4j;
 @DirtiesContext(classMode = ClassMode.AFTER_EACH_TEST_METHOD)
 @Slf4j
 public class ApplicationControllerIntegrationTest {
-	
+
 	@Autowired
 	MockMvc mockMvc;
 
 	@Test
 	@WithMockUser(username = "user1", password = "pwd", roles = "ADMIN")
 	void getAllApplications() throws Exception {
-		log.debug("TEST.getAllApplications(): "+mockMvc.perform(get("/applications"))
-		.andExpect(status().isOk())
-		.andExpect(content().string(containsString("Professional Fish Cleaner")))
-		.andExpect(content().string(containsString("Applications")))
-		.andReturn().getResponse().getContentAsString());
-	}	
-	
+		log.debug("TEST.getAllApplications(): " + mockMvc.perform(get("/applications")).andExpect(status().isOk())
+				.andExpect(content().string(containsString("Professional Fish Cleaner")))
+				.andExpect(content().string(containsString("Applications"))).andReturn().getResponse()
+				.getContentAsString());
+	}
+
 	@Test
 	@WithMockUser(username = "user1", password = "pwd", roles = "ADMIN")
 	void getApplication() throws Exception {
-		log.debug("TEST.getApplication(): "+ mockMvc.perform(get("/applications/view/"+CommonTest.VALID_POSTING_1.toString()))		
-		.andExpect(status().isOk())
-		.andExpect(content().string(containsString("Fisherman")))
-		.andExpect(content().string(containsString("Job Posting Details")))
-		.andExpect(content().string(containsString("Folder 1")))
-		.andReturn().getResponse().getContentAsString());
+		log.debug("TEST.getApplication(): "
+				+ mockMvc.perform(get("/applications/view/" + CommonTest.VALID_POSTING_1.toString()))
+						.andExpect(status().isOk()).andExpect(content().string(containsString("Fisherman")))
+						.andExpect(content().string(containsString("Job Posting Details")))
+						.andExpect(content().string(containsString("Folder 1"))).andReturn().getResponse()
+						.getContentAsString());
 	}
 
 }
-
-
