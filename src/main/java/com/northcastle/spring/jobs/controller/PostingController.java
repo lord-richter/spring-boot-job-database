@@ -36,7 +36,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/postings")
 public class PostingController {
 
-	public static List<String> STATUSLIST = Arrays.asList(Posting.PENDING, Posting.APPLIED, Posting.INTERVIEW,
+	public static List<String> STATUSLIST = Arrays.asList(Posting.PENDING, Posting.APPLIED, Posting.CONSIDER, Posting.INTERVIEW,
 			Posting.OFFER, Posting.REJECTED, Posting.ACCEPTED, Posting.CLOSED);
 
 	@Autowired

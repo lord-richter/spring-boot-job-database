@@ -58,12 +58,14 @@ public class CommonTest {
 	public static final UUID VALID_POSTING_5 = UUID.fromString("613de372-c0f0-4d12-bb94-27d3320c59ec");
 	public static final UUID VALID_POSTING_6 = UUID.fromString("e6914c5f-ba77-4b5d-a89a-2f01d9d4d5a7");
 	public static final UUID VALID_POSTING_7 = UUID.fromString("3f6c7e9a-f214-47d3-b6c8-8f43b7205d04");
+	public static final UUID VALID_POSTING_8 = UUID.fromString("d2a3f02d-f214-47d3-b6c8-6a68af9d99e5");
 
 	// these are not used by other tests
 	public static final UUID VALID_PENDING_1 = UUID.fromString("613de372-c0f0-4d12-bb94-27d3320c59ec");
 	public static final UUID VALID_APPLIED_1 = UUID.fromString("d2a3f02d-7929-41f0-b8d6-6a68af9d99e5");
 	public static final UUID VALID_REJECTED_1 = UUID.fromString("79aeeb2f-721e-4c0a-8a24-063e328a097d");
 	public static final UUID VALID_INTERVIEW_1 = UUID.fromString("e6914c5f-ba77-4b5d-a89a-2f01d9d4d5a7");
+	public static final UUID VALID_CONSIDERING_1 = UUID.fromString("d2a3f02d-f214-47d3-b6c8-6a68af9d99e5");
 	public static final UUID VALID_OFFER_1 = UUID.fromString("3f6c7e9a-f214-47d3-b6c8-8f43b7205d04");
 
 	public static final UUID UNKNOWN_POSTING_UUID = UUID.fromString("ecf1bde1-3849-4b38-94e6-f8a43a89f700");
