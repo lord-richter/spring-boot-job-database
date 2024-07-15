@@ -31,7 +31,7 @@ public class Posting {
 	// master location of status values
 	public static final String PENDING = "Pending";
 	public static final String APPLIED = "Applied";
-	public static final String CONSIDER = "Considering";
+	public static final String CONSIDER = "Consider";
 	public static final String INTERVIEW = "Interview";
 	public static final String OFFER = "Offer";
 	public static final String REJECTED = "Rejected";

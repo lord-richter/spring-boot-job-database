@@ -46,5 +46,6 @@ INSERT INTO JOB.POSTING (POSTING_ID, POSTING_NAME, POSTING_REF, POSTING_URL, POS
 	VALUES ('3f6c7e9a-f214-47d3-b6c8-8f43b7205d04','Novice Fisherman','REF0003','http://www.google.com',1,'2024-05-03','Folder 7','The Lobster Shop','Wilmington, NC','Comment','2024-05-06','Offer','http://joblookup.com');
 
 INSERT INTO JOB.POSTING (POSTING_ID, POSTING_NAME, POSTING_REF, POSTING_URL, POSTING_PRIORITY, POSTING_DATE, POSTING_FOLDER, COMPANY_NAME,COMPANY_ADDRESS,COMMENT,APP_DATE, APP_STATUS, APP_STATUS_URL) 
-	VALUES ('d2a3f02d-f214-47d3-b6c8-6a68af9d99e5','Expert Fisherman','REF0004','http://www.google.com',1,'2024-07-15','Folder 8','The Lobster Shop','Wilmington, NC','Comment','2024-07-15','Considering','http://joblookup.com');
+	VALUES ('d2a3f02d-f214-47d3-b6c8-6a68af9d99e5','Best Fisherman','REF0004','http://www.google.com',1,'2024-07-15','Folder 8','The Lobster Shop','Wilmington, NC','Comment','2024-07-15','Consider','http://joblookup.com');
+	
 		

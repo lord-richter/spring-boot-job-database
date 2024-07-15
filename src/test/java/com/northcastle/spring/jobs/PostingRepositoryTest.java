@@ -31,8 +31,10 @@ public class PostingRepositoryTest {
 
 	@Test
 	void getAllApplications() {
-		int count = 4; // depends on data.sql
-		UUID[] sortedApplicationIds = { CommonTest.VALID_POSTING_7, CommonTest.VALID_POSTING_6,
+		int count = 5; // depends on data.sql
+		
+		// sorted by date, DESC
+		UUID[] sortedApplicationIds = { CommonTest.VALID_POSTING_8, CommonTest.VALID_POSTING_7, CommonTest.VALID_POSTING_6,
 				CommonTest.VALID_POSTING_1, CommonTest.VALID_POSTING_4 };
 		// sorts by appDate, DESC
 		List<Posting> postings = postingRepository.findByAppStatusIn(PostingRepository.allActiveStatus,
@@ -50,11 +52,10 @@ public class PostingRepositoryTest {
 	}
 
 	@Test
-	void getAllByStatus() {
+	void getAppliedByStatus() {
 		int count = 2; // depends on data.sql
 		UUID[] sortedApplicationIds = { CommonTest.VALID_POSTING_4, CommonTest.VALID_POSTING_1 };
-		List<Posting> postings = postingRepository.findByAppStatus(Posting.APPLIED,
-				Sort.by(Direction.DESC, "postingName"));
+		List<Posting> postings = postingRepository.findByAppStatus(Posting.APPLIED,Sort.by(Direction.DESC, "postingName"));
 		postings.forEach(v -> {
 			log.info("TEST.getAllByStatus(APPLIED): " + v);
 		});
@@ -66,11 +67,27 @@ public class PostingRepositoryTest {
 	}
 
 	@Test
+	void getConsiderByStatus() {
+		int count = 1; // depends on data.sql
+		UUID[] sortedApplicationIds = { CommonTest.VALID_POSTING_8 };
+		List<Posting> postings = postingRepository.findByAppStatus(Posting.CONSIDER,Sort.by(Direction.DESC, "postingName"));
+		postings.forEach(v -> {
+			log.info("TEST.getAllByStatus(CONSIDER): " + v);
+		});
+		assertEquals(count, postings.size());
+		// verify expected sort order
+		for (int index = 0; index < count; index++) {
+			assertEquals(sortedApplicationIds[index].toString(), postings.get(index).getId().toString());
+		}
+	}
+	
+	
+	@Test
 	void getAllPostingsDefault() {
-		int count = 7; // depends on data.sql
+		int count = 8; // depends on data.sql
 		UUID[] allPostingIds = { CommonTest.VALID_POSTING_1, CommonTest.VALID_POSTING_2, CommonTest.VALID_POSTING_3,
 				CommonTest.VALID_POSTING_4, CommonTest.VALID_POSTING_5, CommonTest.VALID_POSTING_6,
-				CommonTest.VALID_POSTING_7 };
+				CommonTest.VALID_POSTING_7, CommonTest.VALID_POSTING_8 };
 
 		// default sort is undefined for this query
 		List<Posting> postings = postingRepository.findAll();
@@ -92,21 +109,23 @@ public class PostingRepositoryTest {
 
 	@Test
 	void getAllPostingsSorted() {
-		int count = 7; // depends on data.sql
+		int count = 8; // depends on data.sql
+		
+		// sorted by postingName, DESC
 		UUID[] sortedPostingIds = { CommonTest.VALID_POSTING_4, CommonTest.VALID_POSTING_2, CommonTest.VALID_POSTING_7,
 				CommonTest.VALID_POSTING_3, CommonTest.VALID_POSTING_1, CommonTest.VALID_POSTING_6,
-				CommonTest.VALID_POSTING_5 };
+				CommonTest.VALID_POSTING_8, CommonTest.VALID_POSTING_5  };
 		// specify a sort of postingName and DESC
 		// validate that Spring handles properly and that the results are as expected
 		List<Posting> postings = postingRepository.findAll(Sort.by(Direction.DESC, "postingName"));
-		log.info("TEST.getAllPostingsSorted(postingName,DESC): Count = " + postingRepository.count() + "  Actual = "
-				+ postings.size());
+		log.info("TEST.getAllPostingsSorted(postingName,DESC): Count = " + postingRepository.count() + "  Actual = " + postings.size());
 		postings.forEach(v -> {
 			log.debug("TEST.getAllPostingsSorted(postingName,DESC): " + v);
 		});
 		assertEquals(count, postings.size());
 		// verify expected sort order
 		for (int index = 0; index < count; index++) {
+			log.info("TEST.getAllPostingsSorted(postingName,DESC): "+sortedPostingIds[index].toString()+" == "+ postings.get(index).getId().toString());
 			assertEquals(sortedPostingIds[index].toString(), postings.get(index).getId().toString());
 		}
 
